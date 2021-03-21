@@ -7,6 +7,7 @@ The first step towards biological sustainable agriculture.
 #### Contributors 	
 - Dr. Lisa Tiemann - Michigan State University, USA (MSU)
 - Dr. Maren L Friesen - Washington State University, USA (WSU)
+- Dr. Mingming Yang - Northwest A&F University, Yangling, Shaanxi, China 
 - Dr. Richard Allen White III - University of North Carolina at Charlotte, USA (UNCC)
 
 #### Contact 
