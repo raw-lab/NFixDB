@@ -4,7 +4,8 @@ The first step towards biological sustainable agriculture.
 
 ![GitHub Logo](NFixDB.jpg)
 
-#### Contributors 	
+#### Contributors
+- Madeline Bellanger - University of North Carolina at Charlotte, USA (UNCC)
 - Dr. Lisa Tiemann - Michigan State University, USA (MSU)
 - Dr. Maren L Friesen - Washington State University, USA (WSU)
 - Dr. Richard Allen White III - University of North Carolina at Charlotte, USA (UNCC)
