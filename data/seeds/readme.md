@@ -1,1 +1,0 @@
-# SEED sequences for HMMs
