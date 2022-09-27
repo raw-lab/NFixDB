@@ -1,0 +1,35 @@
+Scripts
+alignments.sh - mafft alignments and hmm builds for all files
+fastas.sh - runs topfastas.py, analysis.py, and nitrogenase_fastas.py
+hmmsearch.sh - combine HMMs and run hmmsearch
+NFixDB.sh - entire process, start to finish. Did not use as actual script since it would’ve taken far too long
+tax_hits.sh - runs taxonomy.py, tophits.py, topfastas.py, analysis.py, and nitrogenase_fastas.py
+analysis.py - runs analysis on tophits.tsv or topfasta.tsv, finds which genomes have all three of each group of genes, outputs filteredhits.tsv or mergefasta.tsv, depending on input file
+nitrogenase_fastas.py - creates new fasta files from mergefasta.tsv
+taxonomy.py - finds sequences that are within ≤ e-10 cutoff and gets taxonomy of genomes. Outputs evalue_taxonomy.tsv for those within cutoff range and oor_taxonomy.tsv for those out of the cutoff range
+topfastas.py - same as tophits.py, but includes a cutoff of ≤ e-15 or bitscore of ≥50. Outputs topfasta.tsv
+tophits.py - finds top results of each gene within the genomes (i.e. take the nifD result with e-104 rather than those with e-92 or e-63). Outputs tophits.tsv
+
+Seeds
+Seeds used in iteration 1 given by RAW
+Seeds used in iteration 2 have date of 08.17.2022
+Seeds used in iteration 3 have date of 09.14.2022
+
+Alignments
+Alignments used in iteration 1 will have date in May, on Linux laptop, don’t have Linux with me right now
+Alignments used in iteration 2 have dates of 08.22.2022 - 08.24.2022
+Alignments used in iteration 3 have dates of 09.14.2022 - 09.19.2022
+
+HMMs
+HMMs used in iteration 1 have date of 06.14.2022
+HMMs used in iteration 2 have dates of 08.22.2022 - 08.24.2022
+HMMs used in iteration 3 have dates of 09.14.2022 - 09.19.2022
+
+TSVs
+complete_taxonomy.tsv - GTDB and NCBI taxonomy obtained from GTDB metadata file
+evalue_taxonomy(_i2 or _i3).tsv - all sequences that meet ≤ e-10 cutoff (very large file)
+filteredhits(_i2 or _i3).tsv - genomes that have all three genes within a group (i.e. nifHDK) from tophits.tsv
+mergefasta(_i2 or _i3).tsv - genomes that have all three genes within a group (i.e. nifHDK) from topfasta.tsv
+oor_taxonomy(_i2 or _i3).tsv - all sequences that DO NOT meet ≤ e-10 cutoff (very large file)
+topfasta_i2 or _i3).tsv - top results of each gene from evalue_taxonomy.tsv that are within cutoff of ≤ e-15 or bitscore of ≥ 50 
+tophits(_i2 or _i3).tsv - top results of each gene from evalue_taxonomy.tsv
