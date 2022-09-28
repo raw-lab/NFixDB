@@ -16,7 +16,7 @@ Seeds used in iteration 2 have date of 08.17.2022
 Seeds used in iteration 3 have date of 09.14.2022
 
 Alignments
-Alignments used in iteration 1 will have date in May, on Linux laptop, don’t have Linux with me right now
+Alignments used in iteration 1 will have date of 05.23.2022
 Alignments used in iteration 2 have dates of 08.22.2022 - 08.24.2022
 Alignments used in iteration 3 have dates of 09.14.2022 - 09.19.2022
 
@@ -33,3 +33,4 @@ mergefasta(_i2 or _i3).tsv - genomes that have all three genes within a group (i
 oor_taxonomy(_i2 or _i3).tsv - all sequences that DO NOT meet ≤ e-10 cutoff (very large file)
 topfasta_i2 or _i3).tsv - top results of each gene from evalue_taxonomy.tsv that are within cutoff of ≤ e-15 or bitscore of ≥ 50 
 tophits(_i2 or _i3).tsv - top results of each gene from evalue_taxonomy.tsv
+hitsWTax_i3.tsv - same as filteredhits_i3.tsv, but with taxonomy included
