@@ -1,4 +1,4 @@
-Scripts - found in bin
+## Scripts - found in bin
 alignments.sh - mafft alignments and hmm builds for all files
 fastas.sh - runs topfastas.py, analysis.py, and nitrogenase_fastas.py
 hmmsearch.sh - combine HMMs and run hmmsearch
