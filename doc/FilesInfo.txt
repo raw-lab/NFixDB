@@ -34,3 +34,4 @@ oor_taxonomy(_i2 or _i3).tsv - all sequences that DO NOT meet ≤ e-10 cutoff (v
 topfasta_i2 or _i3).tsv - top results of each gene from evalue_taxonomy.tsv that are within cutoff of ≤ e-15 or bitscore of ≥ 50 
 tophits(_i2 or _i3).tsv - top results of each gene from evalue_taxonomy.tsv
 hitsWTax_i3.tsv - same as filteredhits_i3.tsv, but with taxonomy included
+filteredhits_i3_full.tsv - same as filteredhits_i3.tsv, but with E-values, bitscores, and taxonomy included
