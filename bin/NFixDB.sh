@@ -1,3 +1,4 @@
+# ------------------ THIS SCRIPT IS NOT USED. IT IS JUST AN EXAMPLE OF THE ENTIRE WORKFLOW OF COMMANDS/SCRIPTS ------------------
 #!/bin/bash
 
 #SBATCH --partition=Orion
