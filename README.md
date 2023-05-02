@@ -1,6 +1,8 @@
 # NF*ix*DB
 Comprehensive database for diazotroph nitrogenases (*nifDHK*), alternative nitrogenases (*vnfDHK* and *anfDHK*), and nitrogenase-like enzymes linked to ribosomal operons (16S-5.8S-23S).<br />
-The first step towards biological sustainable agriculture.
+The first step towards biological sustainable agriculture.<br /><br />
+
+The SQL database can be accessed on Zenodo (10.5281/zenodo.7887034)
 
 ![GitHub Logo](NFixDB.jpg)
 
