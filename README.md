@@ -16,4 +16,4 @@ The SQL database can be accessed on Zenodo (DOI: 10.5281/zenodo.7887034)<br /><b
 The point-of-contact for this project is [Dr. Richard Allen White III](https://github.com/raw937).<br />
 If you have any questions or feedback, please feel free to get in touch by email. <br />
 Dr. Richard Allen White III - [mailto](mailto:rwhit101@uncc.edu)  <br />
-Or [open an issue](https://github.com/raw-lab/NFixDB/issues).
+Or [open an issue](https://github.com/raw-lab/NFixDB/issues).   
