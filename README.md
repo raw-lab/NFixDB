@@ -7,10 +7,10 @@ The SQL database can be accessed on Zenodo (DOI: 10.5281/zenodo.7887034)<br /><b
 ![GitHub Logo](NFixDB.jpg)
 
 #### Contributors
-- Madeline Bellanger - University of North Carolina at Charlotte, USA (UNCC)
+- Madeline Bellanger - University of North Carolina at Charlotte, USA (Charlotte)
 - Dr. Lisa Tiemann - Michigan State University, USA (MSU)
 - Dr. Maren L Friesen - Washington State University, USA (WSU)
-- Dr. Richard Allen White III - University of North Carolina at Charlotte, USA (UNCC)
+- Dr. Richard Allen White III - University of North Carolina at Charlotte, USA (Charlotte)
 
 #### Contact 
 The point-of-contact for this project is [Dr. Richard Allen White III](https://github.com/raw937).<br />
