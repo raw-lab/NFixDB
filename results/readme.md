@@ -1,7 +1,8 @@
 # Results 
 
 ### TSVs
-+ **evalue_taxonomy(_i1, _i2 or _i3).tsv** - all sequences that meet ≤ e-10 cutoff (very large file, ***found on [Zenodo](https://doi.org/10.5281/zenodo.7887034)***)
++ **evalue_taxonomy(_i1, _i2 or _i3).tsv** - all sequences that meet ≤ e-10 cutoff (very large file,
+  ***found on [Zenodo](https://doi.org/10.5281/zenodo.7887034)***)
 + **filteredhits(_i1, _i2 or _i3).tsv** - genomes that have all three genes within a group (i.e. nifHDK) from tophits.tsv
 + **filteredfasta(_i1, _i2 or _i3).tsv** - genomes that have all three genes within a group (i.e. nifHDK) from topfasta.tsv
 + **filt_wSSU_i3.tsv** - filteredhits_i3.tsv with SSU results from barrnap integrated
