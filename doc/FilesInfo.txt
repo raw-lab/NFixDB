@@ -25,7 +25,7 @@ Seeds used in iteration 3 have date of 08.21.2023 - found in data/seeds/i3
 Seeds produced after iteration 3 have date of 08.28.2023 - found in data/seeds/final
 
 Alignments - found in tools/alignments
-Alignments used in iteration 1 will have date of 08.08.2022 - found in tools/alignments/i1
+Alignments used in iteration 1 will have date of 08.08.2023 - found in tools/alignments/i1
 Alignments used in iteration 2 have dates of 08.17.2023 - found in tools/alignments/i2
 Alignments used in iteration 3 have dates of 08.21.2023 - found in tools/alignments/i3
 
