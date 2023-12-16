@@ -1,0 +1,25 @@
+TIGR01860	VNFD	nitrogenase vanadium-iron protein, alpha chain	equivalog	1.18.6.1
+TIGR01861	ANFD	nitrogenase iron-iron protein, alpha chain	equivalog	1.18.6.1
+TIGR02931	anfK_nitrog	Fe-only nitrogenase, beta subunit	equivalog	1.18.6.1
+TIGR02932	vnfK_nitrog	V-containing nitrogenase, beta subunit	equivalog	1.18.6.1
+TIGR01286	nifK	nitrogenase molybdenum-iron protein beta chain	equivalog	1.18.6.1
+TIGR01287	nifH	nitrogenase iron protein	equivalog	1.18.6.1
+TIGR01282	nifD	nitrogenase molybdenum-iron protein alpha chain	equivalog	1.18.6.1
+
+
+TIGR01283	nifE	nitrogenase MoFe cofactor biosynthesis protein NifE	equivalog	
+TIGR01284	alt_nitrog_alph	nitrogenase alpha chain	subfamily	1.18.6.1
+TIGR01285	nifN	nitrogenase molybdenum-iron cofactor biosynthesis protein NifN	equivalog	
+TIGR01290	nifB	nitrogenase cofactor biosynthesis protein NifB	equivalog	
+TIGR01862	N2-ase-Ialpha	nitrogenase component I, alpha chain	subfamily	1.18.6.1
+TIGR02929	anfG_nitrog	Fe-only nitrogenase, delta subunit	equivalog	1.18.6.1
+TIGR02930	vnfG_nitrog	V-containing nitrogenase, delta subunit	equivalog	1.18.6.1
+TIGR02938	nifL_nitrog	nitrogen fixation negative regulator NifL	equivalog
+TIGR02933	nifM_nitrog	nitrogen fixation protein NifM	equivalog	
+TIGR02934	nifT_nitrog	probable nitrogen fixation protein FixT	equivalog	
+TIGR02935	TIGR02935	probable nitrogen fixation protein	hypoth_equivalog	
+TIGR02936	fdxN_nitrog	ferredoxin III, nif-specific	equivalog
+TIGR02940	anfO_nitrog	Fe-only nitrogenase accessory protein AnfO	equivalog
+TIGR01616	nitro_assoc	nitrogenase-associated protein	hypoth_equivalog
+
+TIGR01289	LPOR	light-dependent protochlorophyllide reductase	equivalog	1.3.1.33
