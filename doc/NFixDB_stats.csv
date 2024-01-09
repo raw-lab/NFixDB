@@ -1,0 +1,8 @@
+﻿Genes,Iteration 1,,Iteration 2,,Iteration 3,
+,tophits (≤ e-10),"topfasta (≤ e-15, BS ≥ 50, aln len > 125)",tophits(≤ e-10),"topfasta (≤ e-15, BS ≥ 50, aln len > 125)",tophits (≤ e-10),"topfasta (≤ e-15, BS ≥ 50, aln len > 125)"
+nifHDK,4204,4165,5419,5351,5513,5498
+anfHDK,264,264,264,264,264,264
+vnfHDK,61,59,100,100,118,118
+nflDH,715,696,936,905,798,796
+ChlNIB,3338,3270,4510,4343,4927,4911
+"nifHDK, vnfHDK, anfHDK",3,3,16,16,24,24
