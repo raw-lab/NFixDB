@@ -1,8 +1,12 @@
+#!/usr/bin/python3
+
 import pandas as pd
 import os
 
+# Get filteredhits TSV
 df = pd.DataFrame(pd.read_table('TSVs/filteredhits_i2-3.tsv'))
 
+# Create empty lists for each SSU
 s5 = []
 s58 = []
 s16 = []
@@ -10,6 +14,7 @@ s23 = []
 
 ssu = pd.DataFrame(columns=['GenomeID', '5S', '5.8S', '16S', '23S'])
 
+# Populate SSU dataframe with SSUs that correspond to the genome ID
 directory = 'SSUs'
 for index, row in df.iterrows():
     ssu['GenomeID'] = df['GenomeID']
@@ -39,5 +44,6 @@ for index, row in df.iterrows():
                 s16.clear()
                 s23.clear()
 
+# Convert to TSV
 final_df = pd.merge(df, ssu, on = "GenomeID", how="left")
 final_df.to_csv("TSVs/filteredhits_SSU_i2-3.tsv", sep = "\t")

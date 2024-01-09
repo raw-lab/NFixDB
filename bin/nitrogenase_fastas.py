@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -5,8 +7,10 @@ import pandas as pd
 import os
 import re
 
+# Get filteredfasta TSV
 df = pd.DataFrame(pd.read_table('TSVs/filteredfasta_i2-3.tsv'))
 
+# Make empty lists for each fasta
 nifD = []
 nifH = []
 nifK = [] 
@@ -22,6 +26,7 @@ ChlN = []
 ChIl = []
 ChlB = []
 
+# Create fasta lists by column name
 directory = '/projects/raw_lab/databases/GTDB/protein_faa_reps_r214-combined' 
 for index, row in df.iterrows():
     for file in os.listdir(directory):
@@ -78,6 +83,7 @@ path = os.path.abspath("fastas/R2/final")
 if not os.path.exists(path):
     os.makedirs(path)
 
+# Make actual fasta files
 SeqIO.write(nifD, path+"/nifD_01032024.faa", "fasta") 
 SeqIO.write(nifH, path+"/nifH_01032024.faa", "fasta")
 SeqIO.write(nifK, path+"/nifK_01032024.faa", "fasta")

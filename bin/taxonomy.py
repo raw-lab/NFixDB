@@ -1,10 +1,14 @@
+#!/usr/bin/python3
+
 import pandas as pd
 from Bio import SearchIO
 import os
 import re
 
+# Get taxonomy from GTDB
 complete_df = pd.DataFrame(pd.read_table('TSVs/complete_taxonomy.tsv'))
 
+# Create empty lists
 result_target = []
 query_id = []
 hit_id = []
@@ -24,19 +28,21 @@ oor_location = []
 oor_alength = []
 oor_slength = []
 
-#parse through files in output directory
+# Parse through files in output directory
 directory = 'bac120_ar53_results_i2-3' 
 for filename in os.listdir(directory):
     f = os.path.join(directory, filename)
+    # RegEx fo the GenomeID
     reg = r'^([\w]+_[\w]+.[\w])'
     regex = re.match(reg, filename).group()
     if os.path.isfile(f):
-        #parse file using SearchIO/HmmerIO
+        # Parse file using SearchIO/HmmerIO
         for result in SearchIO.parse(f, 'hmmer3-text'):
             for item in result.hits:
+                # RegEx for the gene name
                 reg2 = r'([a-zA-Z]+)-([a-zA-Z]+)'
                 regex2 = re.match(reg2, result.id).group(1)
-                #check the evalue cutoff and append the data to the corresponding lists
+                # Check the evalue cutoff and append the data to the corresponding lists
                 if item.evalue < 9.9e-10:
                     result_target.append(regex)
                     query_id.append(regex2)
@@ -47,7 +53,7 @@ for filename in os.listdir(directory):
                     location.append(re.match(reg3, item.description).group(1) + "-" + re.match(reg3, item.description).group(2))
                     alength.append(item.hsps[0].aln_span)
                     slength.append(int(re.match(reg3, item.description).group(2))-int(re.match(reg3, item.description).group(1)))
-                #if it does not meet the evalue cutoff, append it to the OOR lists
+                # If it does not meet the evalue cutoff, append it to the OOR lists
                 else:
                     oor_target.append(regex)
                     oor_queryid.append(regex2)
@@ -59,6 +65,7 @@ for filename in os.listdir(directory):
                     oor_alength.append(item.hsps[0].aln_span)
                     oor_slength.append(int(re.match(oreg3, item.description).group(2))-int(re.match(oreg3, item.description).group(1)))
 
+# Convert the good stuff to a TSV
 evalue_dict = {'GenomeID' : result_target, 'GeneName' : query_id, 'SeqID' : hit_id, 'EValue' : evalue, 'Bitscore' : bitscore, 
                 'Location' : location, 'AlnLength' : alength, 'SeqLength' : slength}
 evalue_df = pd.DataFrame(evalue_dict).sort_values('EValue')
@@ -66,7 +73,7 @@ evalue_df = pd.merge(evalue_df, complete_df, on = "GenomeID", how = "left").drop
 
 evalue_df.to_csv("TSVs/evalue_taxonomy_i2-3.tsv", sep = "\t")
 
-
+# Convert the bad stuff to a TSV
 oor_dict = {'GenomeID' : oor_target, 'GeneName' : oor_queryid, 'SeqID' : oor_hitid, 'EValue' : oor_evalue, 'Bitscore' : oor_bitscore, 
             'Location' : oor_location, 'AlnLength' : oor_alength, 'SeqLength' : oor_slength}
 oor_df = pd.DataFrame(oor_dict).sort_values('EValue')

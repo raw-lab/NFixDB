@@ -20,20 +20,20 @@ echo ""
 
 # rsync -a /projects/raw_lab/databases/GTDB/protein_fna_reps/bacteria/ /projects/raw_lab/databases/GTDB/protein_fna_reps/archaea/ /projects/raw_lab/databases/GTDB/protein_fna_reps_r214-combined
 
-# mkdir -p SSUs
+mkdir -p SSUs
 
-# genomes=$(cut -f2 TSVs/filteredhits_i2-3.tsv) #column with genome IDs (GB_GCA_018902765.1)
+genomes=$(cut -f2 TSVs/filteredhits_i2-3.tsv) #column with genome IDs (GB_GCA_018902765.1)
 
-# module load anaconda3
-# conda activate barrnap 
+module load anaconda3
+conda activate barrnap 
 
-# echo "Running barrnap..."
-# for g in $genomes
-# do
-#     cat /projects/raw_lab/databases/GTDB/protein_fna_reps_r214-combined/"$g"_protein.fna | barrnap -o ./SSUs/"$g".faa
-# done
+echo "Running barrnap..."
+for g in $genomes
+do
+    cat /projects/raw_lab/databases/GTDB/protein_fna_reps_r214-combined/"$g"_protein.fna | barrnap -o ./SSUs/"$g".faa
+done
 
-# echo "Done"
+echo "Done"
 
 echo "Running ssu.py..."
 python3 scripts/ssu.py

@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import pandas as pd
 from Bio import SearchIO
 import os
@@ -11,7 +13,7 @@ evalue = []
 bitscore = []
 alength = []
 
-#parse through files in output directory
+# Parse through files in output directory
 directory = 'oDB_results/clusters' 
 for filename in os.listdir(directory):
     f = os.path.join(directory, filename)
@@ -23,12 +25,12 @@ for filename in os.listdir(directory):
     regex2 = re.search(reg2, filename).group(1)
     print("Analyzing " + regex2 + " in " + filename)
     if os.path.isfile(f):
-        #parse file using SearchIO/HmmerIO
+        # Parse file using SearchIO/HmmerIO
         for result in SearchIO.parse(f, 'hmmer3-text'):
             for item in result.hits:
                 reg3 = r'([a-zA-Z]+)-([a-zA-Z]+)'
                 regex3 = re.match(reg3, result.id).group(1)
-                #check the evalue cutoff and append the data to the corresponding lists
+                # Check the evalue cutoff and append the data to the corresponding lists
                 if item.evalue < 9.9e-10 and item.hsps[0].aln_span > 150:
                     db.append(regex)
                     ogene.append(regex2)
@@ -38,6 +40,7 @@ for filename in os.listdir(directory):
                     bitscore.append(item.bitscore)
                     alength.append(item.hsps[0].aln_span)
 
+# Create dataframe and convert to TSV
 evalue_dict = {'Database' : db, 'OrgGene' : ogene, 'Gene' : query_id, 'SeqID' : hit_id, 'EValue' : evalue, 'Bitscore' : bitscore, 'AlnLength' : alength}
 evalue_df = pd.DataFrame(evalue_dict).sort_values('EValue')
 

@@ -20,26 +20,26 @@ echo ""
 
 module load cd-hit
 
-# # Iteration 2 clusters
-# for file in fastas/R2/i2-2/*; do
-#    cd-hit -i "$file" -o "clusters/R2/i2-2/$(basename -- $file)_100.faa" -c 1.00
-#    cd-hit -i "$file" -o "clusters/R2/i2-2/$(basename -- $file)_99.faa" -c 0.99
-#    cd-hit -i "$file" -o "clusters/R2/i2-2/$(basename -- $file)_97.faa" -c 0.97
-# done
+# Iteration 2 clusters
+for file in fastas/R2/i2-2/*; do
+   cd-hit -i "$file" -o "clusters/R2/i2-2/$(basename -- $file)_100.faa" -c 1.00
+   cd-hit -i "$file" -o "clusters/R2/i2-2/$(basename -- $file)_99.faa" -c 0.99
+   cd-hit -i "$file" -o "clusters/R2/i2-2/$(basename -- $file)_97.faa" -c 0.97
+done
 
-# # Iteration 3 clusters
-# for file in fastas/R2/i2-3/*; do
-#    cd-hit -i "$file" -o "clusters/R2/i2-3/$(basename -- $file)_100.faa" -c 1.00
-#    cd-hit -i "$file" -o "clusters/R2/i2-3/$(basename -- $file)_99.faa" -c 0.99
-#    cd-hit -i "$file" -o "clusters/R2/i2-3/$(basename -- $file)_97.faa" -c 0.97
-# done
+# Iteration 3 clusters
+for file in fastas/R2/i2-3/*; do
+   cd-hit -i "$file" -o "clusters/R2/i2-3/$(basename -- $file)_100.faa" -c 1.00
+   cd-hit -i "$file" -o "clusters/R2/i2-3/$(basename -- $file)_99.faa" -c 0.99
+   cd-hit -i "$file" -o "clusters/R2/i2-3/$(basename -- $file)_97.faa" -c 0.97
+done
 
-# # Final clusters
-# for file in fastas/R2/final/*; do
-#    cd-hit -i "$file" -o "clusters/R2/final/$(basename -- $file)_100.faa" -c 1.00
-#    cd-hit -i "$file" -o "clusters/R2/final/$(basename -- $file)_99.faa" -c 0.99
-#    cd-hit -i "$file" -o "clusters/R2/final/$(basename -- $file)_97.faa" -c 0.97
-# done
+# Final clusters
+for file in fastas/R2/final/*; do
+   cd-hit -i "$file" -o "clusters/R2/final/$(basename -- $file)_100.faa" -c 1.00
+   cd-hit -i "$file" -o "clusters/R2/final/$(basename -- $file)_99.faa" -c 0.99
+   cd-hit -i "$file" -o "clusters/R2/final/$(basename -- $file)_97.faa" -c 0.97
+done
 
 # Nucleotide clusters
 for file in fastas/R2/final_nuc/*; do

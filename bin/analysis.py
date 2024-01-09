@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import pandas as pd
 
 df = pd.DataFrame(pd.read_table('TSVs/tophits_i2-3.tsv'))

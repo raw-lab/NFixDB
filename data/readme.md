@@ -1,10 +1,10 @@
 # Data here
 
 ### Seeds
-+ Seeds used in *iteration 1* were hand curated and have date of 08.08.2023 - found in /seeds/i1
-+ Seeds used in *iteration 2* have date of 08.11.2023 - found in /seeds/i2
-+ Seeds used in *iteration 3* have date of 08.21.2023 - found in /seeds/i3
-+ Seeds produced after iteration 3 have date of 08.28.2023 - found in data/seeds/final
++ Seeds used in *iteration 1* were hand curated and have date of 12.16.2023 - found in /seeds/i2-1
++ Seeds used in *iteration 2* have date of 12.19.2023 - found in /seeds/i2-2
++ Seeds used in *iteration 3* have date of 12.22.2023 - found in /seeds/i2-3
++ Seeds produced after iteration 3 have date of 01.03.2024 - found in data/seeds/final
 
 ### Buckley
 + *nifH* FASTA files from Buckley [(Gaby and Buckley, 2014)](https://doi.org/10.1093/database/bau001)

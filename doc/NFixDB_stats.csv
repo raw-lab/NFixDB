@@ -1,8 +1,0 @@
-Genes,Iteration 1,,Iteration 2,,Iteration 3,
-,tophits.tsv (≤ e-10),topfasta.tsv (≤ e-15 or BS ≥ 50),tophits.tsv (≤ e-10),topfasta.tsv (≤ e-15 or BS ≥ 50),tophits.tsv (≤ e-10),topfasta.tsv (≤ e-15 or BS ≥ 50)
-nifHDK,2095,2004,5176,5096,5284,5154
-vnfHDK,98,96,103,103,110,109
-anfHDK,198,195,323,323,431,427
-"nifHDK, vnfHDK, anfHDK",3,0,21,21,34,34
-nflHD,707,687,710,703,711,710
-ChlBNI,3311,3245,3337,2215,3326,3319

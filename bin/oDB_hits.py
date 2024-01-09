@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import pandas as pd
 
 df = pd.DataFrame(pd.read_table('TSVs/oDB_class.tsv'))

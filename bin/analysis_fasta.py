@@ -2,7 +2,7 @@
 import pandas as pd
 
 df = pd.DataFrame(pd.read_table('TSVs/topfasta_i2-3.tsv'))
-print("fasta counts: ")
+print("Fasta counts: ")
 
 #nifHDK
 nif = df[['GenomeID', 'nifH', 'nifD', 'nifK']].copy()
