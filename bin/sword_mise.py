@@ -40,7 +40,7 @@ mise_comb.insert(3, 'NFixDBSeq', nSeq)
 
 # Make everything look a little better
 mise_comb = mise_comb.drop_duplicates().drop(index=[10, 11130, 14616, 25736, 26703, 30189, 31156, 42276, 45752, 46719, 57839, 61325])
-mise_comb = mise_comb.rename(columns={'Query id': 'MiseID', 'Subject id': 'NFixDBID', '% identity': '%Identity', 
+mise_comb = mise_comb.rename(columns={'Query id': 'MiseID', 'Subject id': 'NFixDBID', '% identity': 'PercIdentity', 
                     'alignment length': 'AlnLength', 'mismatches': 'Mismatches', 'gap openings': 'GapOpens', 'q. start': 'QueryStart', 
                     'q. end': 'QueryEnd', 's. start': 'SeqStart', 's. end': 'SeqEnd', 'e-value': 'EValue', 'score': 'Score'})
 
@@ -49,8 +49,10 @@ mise_comb.to_csv("TSVs/mise_sword.tsv", sep = "\t")
 
 
 # Convert columns to number datatypes and get full length alignments (≤ 220 AA)
-mise_comb = mise_comb.astype({'AlnLength': 'int', 'EValue': 'float', 'Score': 'int'})
+mise_comb = mise_comb.astype({'AlnLength': 'int', 'PercIdentity': 'int', 'EValue': 'float', 'Score': 'int'})
 mise_df = mise_comb[mise_comb.AlnLength >= 220]
+mise_df = mise_df[mise_df.PercIdentity >= 50] 
+mise_df = mise_df[mise_df.EValue <= 9.9e-10]
 
 # Get the highest result for each sequence ID
 mise_df = mise_df.sort_values('EValue')

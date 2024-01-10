@@ -40,7 +40,7 @@ buckley_comb.insert(3, 'NFixDBSeq', nSeq)
 
 # Make everything look a little better
 buckley_comb = buckley_comb.drop_duplicates().drop(index=[10, 70346, 142030, 152888])
-buckley_comb = buckley_comb.rename(columns={'Query id': 'BuckleyID', 'Subject id': 'NFixDBID', '% identity': '%Identity', 
+buckley_comb = buckley_comb.rename(columns={'Query id': 'BuckleyID', 'Subject id': 'NFixDBID', '% identity': 'PercIdentity', 
                     'alignment length': 'AlnLength', 'mismatches': 'Mismatches', 'gap openings': 'GapOpens', 'q. start': 'QueryStart', 
                     'q. end': 'QueryEnd', 's. start': 'SeqStart', 's. end': 'SeqEnd', 'e-value': 'EValue', 'score': 'Score'})
 
@@ -49,8 +49,10 @@ buckley_comb.to_csv("TSVs/buckley_sword.tsv", sep = "\t")
 
 
 # Convert columns to number datatypes and get full length alignments (≤ 220 AA)
-buckley_comb = buckley_comb.astype({'AlnLength': 'int', 'EValue': 'float', 'Score': 'int'})
+buckley_comb = buckley_comb.astype({'AlnLength': 'int', 'PercIdentity': 'int', 'EValue': 'float', 'Score': 'int'})
 buckley_df = buckley_comb[buckley_comb.AlnLength >= 220]
+buckley_df = buckley_df[buckley_df.PercIdentity >= 50] 
+buckley_df = buckley_df[buckley_df.EValue <= 9.9e-10]
 
 # Get the highest result for each sequence ID
 buckley_df = buckley_df.sort_values('EValue')
