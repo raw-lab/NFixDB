@@ -22,6 +22,10 @@
 
 + **oDB_hmm.sh** - runs hmmsearch on outside databases using the HMMs produced from i2-3
 
++ **sword_alns.sh** - runs SWORD on outside databases
+
++ **sword_[db].py** - analyzes SWORD results for corresponding database
+
 + **sql.py** - creates SQL database of all TSVs
 
 + **ssu.sh** - runs barrnap on genomes in filteredhits_i2-3.tsv
