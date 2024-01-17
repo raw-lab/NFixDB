@@ -5,7 +5,7 @@ import os
 import re
 
 # Set directory, empty list of dataframes for each output file, and empty lists for query/subject seqeunces
-directory = 'sword/Zehr'
+directory = 'sword/i2/Zehr'
 dfs = []
 nSeq = []
 bSeq = []
@@ -30,6 +30,8 @@ for filename in os.listdir(directory):
     for line in df.iterrows():
         nSeq.append(regex)
         bSeq.append(regex2)
+    
+    print(f + " done")
 
 # Combine all dataframes into one large dataframe
 zehr_comb = pd.concat(dfs, axis=0, ignore_index=True)
@@ -39,7 +41,8 @@ zehr_comb.insert(1, 'ZehrSeq', bSeq)
 zehr_comb.insert(3, 'NFixDBSeq', nSeq)
 
 # Make everything look a little better
-zehr_comb = zehr_comb.drop_duplicates().drop(index=[4, 73519, 147720, 162460])
+zehr_comb = zehr_comb.drop_duplicates()
+zehr_comb = zehr_comb[zehr_comb['Query id'] != 'Query id']
 zehr_comb = zehr_comb.rename(columns={'Query id': 'ZehrID', 'Subject id': 'NFixDBID', '% identity': 'PercIdentity', 
                     'alignment length': 'AlnLength', 'mismatches': 'Mismatches', 'gap openings': 'GapOpens', 'q. start': 'QueryStart', 
                     'q. end': 'QueryEnd', 's. start': 'SeqStart', 's. end': 'SeqEnd', 'e-value': 'EValue', 'score': 'Score'})

@@ -5,7 +5,7 @@ import os
 import re
 
 # Set directory, empty list of dataframes for each output file, and empty lists for query/subject seqeunces
-directory = 'sword/Mise'
+directory = 'sword/i2/Mise'
 dfs = []
 nSeq = []
 bSeq = []
@@ -19,7 +19,7 @@ for filename in os.listdir(directory):
     regex = re.match(reg, filename).group(1)
     
     # RegEx for MiseSeq
-    reg2 = r'\_(.*?_.*?)\_'
+    reg2 = r'\_(.*?)\_'
     regex2 = re.search(reg2, filename).group(1)
 
     # Read each output file, ignoring the comment lines and add it to the dfs list
@@ -39,7 +39,8 @@ mise_comb.insert(1, 'MiseSeq', bSeq)
 mise_comb.insert(3, 'NFixDBSeq', nSeq)
 
 # Make everything look a little better
-mise_comb = mise_comb.drop_duplicates().drop(index=[10, 11130, 14616, 25736, 26703, 30189, 31156, 42276, 45752, 46719, 57839, 61325])
+mise_comb = mise_comb.drop_duplicates()
+mise_comb = mise_comb[mise_comb['Query id'] != 'Query id']
 mise_comb = mise_comb.rename(columns={'Query id': 'MiseID', 'Subject id': 'NFixDBID', '% identity': 'PercIdentity', 
                     'alignment length': 'AlnLength', 'mismatches': 'Mismatches', 'gap openings': 'GapOpens', 'q. start': 'QueryStart', 
                     'q. end': 'QueryEnd', 's. start': 'SeqStart', 's. end': 'SeqEnd', 'e-value': 'EValue', 'score': 'Score'})

@@ -22,7 +22,7 @@ echo ""
 
 mkdir -p SSUs
 
-genomes=$(cut -f2 TSVs/filteredhits_i2-3.tsv) #column with genome IDs (GB_GCA_018902765.1)
+genomes=$(cut -f2 TSVs/filteredhits.tsv) #column with genome IDs (GB_GCA_018902765.1)
 
 module load anaconda3
 conda activate barrnap 

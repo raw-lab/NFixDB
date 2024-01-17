@@ -14,7 +14,7 @@ bitscore = []
 alength = []
 
 # Parse through files in output directory
-directory = 'oDB_results/clusters' 
+directory = 'oDB_results/clusters/97/i2-1' 
 for filename in os.listdir(directory):
     f = os.path.join(directory, filename)
     # RegEx for database name

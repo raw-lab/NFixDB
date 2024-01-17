@@ -3,7 +3,7 @@
 import pandas as pd
 
 # Get evalue_taxonomy TSV
-df = pd.DataFrame(pd.read_table('TSVs/evalue_taxonomy_i2-3.tsv'))
+df = pd.DataFrame(pd.read_table('TSVs/evalue_taxonomy.tsv'))
 
 # Take subset of dataframe
 topHits_df = pd.DataFrame(columns=['GenomeID', 
@@ -48,6 +48,6 @@ for index, row in df3.iterrows():
 
 # Drop duplicates and make a TSV
 topHits_df = topHits_df.drop_duplicates()
-topHits_df.to_csv("TSVs/tophits_i2-3.tsv", sep = "\t")
+topHits_df.to_csv("TSVs/tophits.tsv", sep = "\t")
 
 

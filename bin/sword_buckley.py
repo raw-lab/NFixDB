@@ -5,7 +5,7 @@ import os
 import re
 
 # Set directory, empty list of dataframes for each output file, and empty lists for query/subject seqeunces
-directory = 'sword/Buckley'
+directory = 'sword/i2/Buckley'
 dfs = []
 nSeq = []
 bSeq = []
@@ -39,7 +39,8 @@ buckley_comb.insert(1, 'BuckleySeq', bSeq)
 buckley_comb.insert(3, 'NFixDBSeq', nSeq)
 
 # Make everything look a little better
-buckley_comb = buckley_comb.drop_duplicates().drop(index=[10, 70346, 142030, 152888])
+buckley_comb = buckley_comb.drop_duplicates()
+buckley_comb = buckley_comb[buckley_comb['Query id'] != 'Query id']
 buckley_comb = buckley_comb.rename(columns={'Query id': 'BuckleyID', 'Subject id': 'NFixDBID', '% identity': 'PercIdentity', 
                     'alignment length': 'AlnLength', 'mismatches': 'Mismatches', 'gap openings': 'GapOpens', 'q. start': 'QueryStart', 
                     'q. end': 'QueryEnd', 's. start': 'SeqStart', 's. end': 'SeqEnd', 'e-value': 'EValue', 'score': 'Score'})

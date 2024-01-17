@@ -1,18 +1,8 @@
-#!/usr/bin/python3
 import pandas as pd
 
-# Get columns in tophits that are not in filteredhits
-tophits = pd.DataFrame(pd.read_table('TSVs/tophits_i2-3.tsv'))
-taxid = tophits[['GenomeID', 'NCBI_TaxID', 'location_nflH', 'location_nflD', 
-                'location_ChlB', 'location_ChIl', 'location_ChlN']]
+filthits = pd.DataFrame(pd.read_table('TSVs/filteredhits_SSU_i2-1.tsv'))
 
-filthits = pd.DataFrame(pd.read_table('TSVs/filteredhits_SSU_i2-3.tsv'))
-
-# Merge the two dataframes
-final = pd.merge(filthits, taxid, on='GenomeID', how="left").drop(columns=["Unnamed: 0.1", "Unnamed: 0"])
-
-# Organize the final dataframe and conver to TSV
-final = final[['GenomeID', 'nifH', 'EV_nifH', 'bitscore_nifH', 'location_nifH', 'alnLen_nifH', 'seqLen_nifH',
+final = filthits[['GenomeID', 'nifH', 'EV_nifH', 'bitscore_nifH', 'location_nifH', 'alnLen_nifH', 'seqLen_nifH',
                             'nifD', 'EV_nifD', 'bitscore_nifD', 'location_nifD', 'alnLen_nifD', 'seqLen_nifD',
                             'nifK', 'EV_nifK', 'bitscore_nifK', 'location_nifK', 'alnLen_nifK', 'seqLen_nifK',
                             'anfH', 'EV_anfH', 'bitscore_anfH', 'location_anfH', 'alnLen_anfH', 'seqLen_anfH',

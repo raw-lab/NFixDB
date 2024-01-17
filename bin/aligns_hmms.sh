@@ -19,47 +19,47 @@ echo "======================================================"
 echo ""
 
 #anf
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/anfD_12222023.faa > ../alignments/R2/i2-3/anfD-local_aln_i2-3_12222023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/anfH_12222023.faa > ../alignments/R2/i2-3/anfH-local_aln_i2-3_12222023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/anfK_12222023.faa > ../alignments/R2/i2-3/anfK-local_aln_i2-3_12222023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/anfD_12192023.faa > ../alignments/R2/final/anfD-local_aln_i2-2_12192023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/anfH_12192023.faa > ../alignments/R2/final/anfH-local_aln_i2-2_12192023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/anfK_12192023.faa > ../alignments/R2/final/anfK-local_aln_i2-2_12192023.faa
 
-hmmbuild ./HMMs/anfD-local_i2-3_12222023.hmm ../alignments/R2/i2-3/anfD-local_aln_i2-3_12222023.faa
-hmmbuild ./HMMs/anfH-local_i2-3_12222023.hmm ../alignments/R2/i2-3/anfH-local_aln_i2-3_12222023.faa
-hmmbuild ./HMMs/anfK-local_i2-3_12222023.hmm ../alignments/R2/i2-3/anfK-local_aln_i2-3_12222023.faa
+hmmbuild ./HMMs/anfD-local_final_12192023.hmm ../alignments/R2/final/anfD-local_aln_i2-2_12192023.faa
+hmmbuild ./HMMs/anfH-local_final_12192023.hmm ../alignments/R2/final/anfH-local_aln_i2-2_12192023.faa
+hmmbuild ./HMMs/anfK-local_final_12192023.hmm ../alignments/R2/final/anfK-local_aln_i2-2_12192023.faa
 
 #nif
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/nifH_12222023.faa > ../alignments/R2/i2-3/nifH-local_aln_i2-3_12222023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/nifD_12222023.faa > ../alignments/R2/i2-3/nifD-local_aln_i2-3_12222023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/nifK_12222023.faa > ../alignments/R2/i2-3/nifK-local_aln_i2-3_12222023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/nifH_12192023.faa > ../alignments/R2/final/nifH-local_aln_i2-2_12192023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/nifD_12192023.faa > ../alignments/R2/final/nifD-local_aln_i2-2_12192023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/nifK_12192023.faa > ../alignments/R2/final/nifK-local_aln_i2-2_12192023.faa
 
-hmmbuild ./HMMs/nifH-local_i2-3_12222023.hmm ../alignments/R2/i2-3/nifH-local_aln_i2-3_12222023.faa
-hmmbuild ./HMMs/nifD-local_i2-3_12222023.hmm ../alignments/R2/i2-3/nifD-local_aln_i2-3_12222023.faa
-hmmbuild ./HMMs/nifK-local_i2-3_12222023.hmm ../alignments/R2/i2-3/nifK-local_aln_i2-3_12222023.faa
+hmmbuild ./HMMs/nifH-local_final_12192023.hmm ../alignments/R2/final/nifH-local_aln_i2-2_12192023.faa
+hmmbuild ./HMMs/nifD-local_final_12192023.hmm ../alignments/R2/final/nifD-local_aln_i2-2_12192023.faa
+hmmbuild ./HMMs/nifK-local_final_12192023.hmm ../alignments/R2/final/nifK-local_aln_i2-2_12192023.faa
 
 #vnf
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/vnfD_12222023.faa > ../alignments/R2/i2-3/vnfD-local_aln_i2-3_12222023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/vnfH_12222023.faa > ../alignments/R2/i2-3/vnfH-local_aln_i2-3_12222023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/vnfK_12222023.faa > ../alignments/R2/i2-3/vnfK-local_aln_i2-3_12222023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/vnfD_12192023.faa > ../alignments/R2/final/vnfD-local_aln_i2-2_12192023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/vnfH_12192023.faa > ../alignments/R2/final/vnfH-local_aln_i2-2_12192023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/vnfK_12192023.faa > ../alignments/R2/final/vnfK-local_aln_i2-2_12192023.faa
 
-hmmbuild ./HMMs/vnfD-local_i2-3_12222023.hmm ../alignments/R2/i2-3/vnfD-local_aln_i2-3_12222023.faa
-hmmbuild ./HMMs/vnfH-local_i2-3_12222023.hmm ../alignments/R2/i2-3/vnfH-local_aln_i2-3_12222023.faa
-hmmbuild ./HMMs/vnfK-local_i2-3_12222023.hmm ../alignments/R2/i2-3/vnfK-local_aln_i2-3_12222023.faa
+hmmbuild ./HMMs/vnfD-local_final_12192023.hmm ../alignments/R2/final/vnfD-local_aln_i2-2_12192023.faa
+hmmbuild ./HMMs/vnfH-local_final_12192023.hmm ../alignments/R2/final/vnfH-local_aln_i2-2_12192023.faa
+hmmbuild ./HMMs/vnfK-local_final_12192023.hmm ../alignments/R2/final/vnfK-local_aln_i2-2_12192023.faa
 
 #Chl
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/ChIl_12222023.faa > ../alignments/R2/i2-3/ChIl-local_aln_i2-3_12222023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/ChlN-BchN_12222023.faa > ../alignments/R2/i2-3/ChlN-local_aln_i2-3_12222023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/ChlB-BchB_12222023.faa > ../alignments/R2/i2-3/ChlB-local_aln_i2-3_12222023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/ChIl_12192023.faa > ../alignments/R2/final/ChIl-local_aln_i2-2_12192023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/ChlN-BchN_12192023.faa > ../alignments/R2/final/ChlN-local_aln_i2-2_12192023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/ChlB-BchB_12192023.faa > ../alignments/R2/final/ChlB-local_aln_i2-2_12192023.faa
 
-hmmbuild ./HMMs/ChIl-local_i2-3_12222023.hmm ../alignments/R2/i2-3/ChIl-local_aln_i2-3_12222023.faa
-hmmbuild ./HMMs/ChlN-local_i2-3_12222023.hmm ../alignments/R2/i2-3/ChlN-local_aln_i2-3_12222023.faa
-hmmbuild ./HMMs/ChlB-local_i2-3_12222023.hmm ../alignments/R2/i2-3/ChlB-local_aln_i2-3_12222023.faa
+hmmbuild ./HMMs/ChIl-local_final_12192023.hmm ../alignments/R2/final/ChIl-local_aln_i2-2_12192023.faa
+hmmbuild ./HMMs/ChlN-local_final_12192023.hmm ../alignments/R2/final/ChlN-local_aln_i2-2_12192023.faa
+hmmbuild ./HMMs/ChlB-local_final_12192023.hmm ../alignments/R2/final/ChlB-local_aln_i2-2_12192023.faa
 
 #nfl
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/nflD_12222023.faa > ../alignments/R2/i2-3/nflD-local_aln_i2-3_12222023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/i2-3/nflH_12222023.faa > ../alignments/R2/i2-3/nflH-local_aln_i2-3_12222023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/nflD_12192023.faa > ../alignments/R2/final/nflD-local_aln_i2-2_12192023.faa
+mafft --localpair --maxiterate 1000 ../fastas/R2/final/nflH_12192023.faa > ../alignments/R2/final/nflH-local_aln_i2-2_12192023.faa
 
-hmmbuild ./HMMs/nflD-local_i2-3_12222023.hmm ../alignments/R2/i2-3/nflD-local_aln_i2-3_12222023.faa
-hmmbuild ./HMMs/nflH-local_i2-3_12222023.hmm ../alignments/R2/i2-3/nflH-local_aln_i2-3_12222023.faa
+hmmbuild ./HMMs/nflD-local_final_12192023.hmm ../alignments/R2/final/nflD-local_aln_i2-2_12192023.faa
+hmmbuild ./HMMs/nflH-local_final_12192023.hmm ../alignments/R2/final/nflH-local_aln_i2-2_12192023.faa
 
 echo ""
 echo "======================================================"

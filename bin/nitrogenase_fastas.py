@@ -8,7 +8,7 @@ import os
 import re
 
 # Get filteredfasta TSV
-df = pd.DataFrame(pd.read_table('TSVs/filteredfasta_i2-3.tsv'))
+df = pd.DataFrame(pd.read_table('TSVs/filteredfasta.tsv'))
 
 # Make empty lists for each fasta
 nifD = []
@@ -84,21 +84,21 @@ if not os.path.exists(path):
     os.makedirs(path)
 
 # Make actual fasta files
-SeqIO.write(nifD, path+"/nifD_01032024.faa", "fasta") 
-SeqIO.write(nifH, path+"/nifH_01032024.faa", "fasta")
-SeqIO.write(nifK, path+"/nifK_01032024.faa", "fasta")
+SeqIO.write(nifD, path+"/nifD_01052024.faa", "fasta") 
+SeqIO.write(nifH, path+"/nifH_01052024.faa", "fasta")
+SeqIO.write(nifK, path+"/nifK_01052024.faa", "fasta")
 
-SeqIO.write(anfD, path+"/anfD_01032024.faa", "fasta")
-SeqIO.write(anfH, path+"/anfH_01032024.faa", "fasta")
-SeqIO.write(anfK, path+"/anfK_01032024.faa", "fasta")
+SeqIO.write(anfD, path+"/anfD_01052024.faa", "fasta")
+SeqIO.write(anfH, path+"/anfH_01052024.faa", "fasta")
+SeqIO.write(anfK, path+"/anfK_01052024.faa", "fasta")
 
-SeqIO.write(vnfD, path+"/vnfD_01032024.faa", "fasta")
-SeqIO.write(vnfH, path+"/vnfH_01032024.faa", "fasta")
-SeqIO.write(vnfK, path+"/vnfK_01032024.faa", "fasta")
+SeqIO.write(vnfD, path+"/vnfD_01052024.faa", "fasta")
+SeqIO.write(vnfH, path+"/vnfH_01052024.faa", "fasta")
+SeqIO.write(vnfK, path+"/vnfK_01052024.faa", "fasta")
 
-SeqIO.write(nflD, path+"/nflD_01032024.faa", "fasta")
-SeqIO.write(nflH, path+"/nflH_01032024.faa", "fasta")
+SeqIO.write(nflD, path+"/nflD_01052024.faa", "fasta")
+SeqIO.write(nflH, path+"/nflH_01052024.faa", "fasta")
 
-SeqIO.write(ChlN, path+"/ChlN_01032024.faa", "fasta")
-SeqIO.write(ChIl, path+"/ChIl_01032024.faa", "fasta")
-SeqIO.write(ChlB, path+"/ChlB_01032024.faa", "fasta") 
+SeqIO.write(ChlN, path+"/ChlN_01052024.faa", "fasta")
+SeqIO.write(ChIl, path+"/ChIl_01052024.faa", "fasta")
+SeqIO.write(ChlB, path+"/ChlB_01052024.faa", "fasta") 

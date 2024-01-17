@@ -5,7 +5,7 @@ import os
 import re
 
 # Set directory, empty list of dataframes for each output file, and empty lists for query/subject seqeunces
-directory = 'sword/FunGene'
+directory = 'sword/i2/FunGene'
 dfs = []
 nSeq = []
 bSeq = []
@@ -39,7 +39,8 @@ fungene_comb.insert(1, 'FunGeneSeq', bSeq)
 fungene_comb.insert(3, 'NFixDBSeq', nSeq)
 
 # Make everything look a little better
-fungene_comb = fungene_comb.drop_duplicates().drop(index=[10, 350, 690, 1030])
+fungene_comb = fungene_comb.drop_duplicates()
+fungene_comb = fungene_comb[fungene_comb['Query id'] != 'Query id']
 fungene_comb = fungene_comb.rename(columns={'Query id': 'FunGeneID', 'Subject id': 'NFixDBID', '% identity': 'PercIdentity', 
                     'alignment length': 'AlnLength', 'mismatches': 'Mismatches', 'gap openings': 'GapOpens', 'q. start': 'QueryStart', 
                     'q. end': 'QueryEnd', 's. start': 'SeqStart', 's. end': 'SeqEnd', 'e-value': 'EValue', 'score': 'Score'})

@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 # Get filteredhits TSV
-df = pd.DataFrame(pd.read_table('TSVs/filteredhits_i2-3.tsv'))
+df = pd.DataFrame(pd.read_table('TSVs/filteredhits.tsv'))
 
 # Create empty lists for each SSU
 s5 = []
@@ -46,4 +46,4 @@ for index, row in df.iterrows():
 
 # Convert to TSV
 final_df = pd.merge(df, ssu, on = "GenomeID", how="left")
-final_df.to_csv("TSVs/filteredhits_SSU_i2-3.tsv", sep = "\t")
+final_df.to_csv("TSVs/filteredhits_SSU.tsv", sep = "\t")

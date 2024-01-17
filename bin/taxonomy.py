@@ -29,7 +29,7 @@ oor_alength = []
 oor_slength = []
 
 # Parse through files in output directory
-directory = 'bac120_ar53_results_i2-3' 
+directory = 'bac120_ar53_results_i2-1' 
 for filename in os.listdir(directory):
     f = os.path.join(directory, filename)
     # RegEx fo the GenomeID
@@ -71,7 +71,7 @@ evalue_dict = {'GenomeID' : result_target, 'GeneName' : query_id, 'SeqID' : hit_
 evalue_df = pd.DataFrame(evalue_dict).sort_values('EValue')
 evalue_df = pd.merge(evalue_df, complete_df, on = "GenomeID", how = "left").drop(columns = ["Unnamed: 0"]).drop_duplicates()
 
-evalue_df.to_csv("TSVs/evalue_taxonomy_i2-3.tsv", sep = "\t")
+evalue_df.to_csv("TSVs/evalue_taxonomy.tsv", sep = "\t")
 
 # Convert the bad stuff to a TSV
 oor_dict = {'GenomeID' : oor_target, 'GeneName' : oor_queryid, 'SeqID' : oor_hitid, 'EValue' : oor_evalue, 'Bitscore' : oor_bitscore, 
@@ -79,6 +79,6 @@ oor_dict = {'GenomeID' : oor_target, 'GeneName' : oor_queryid, 'SeqID' : oor_hit
 oor_df = pd.DataFrame(oor_dict).sort_values('EValue')
 oor_df = pd.merge(oor_df, complete_df, on = "GenomeID", how = "left").drop(columns = ["Unnamed: 0"]).drop_duplicates()
 
-oor_df.to_csv("TSVs/oor_taxonomy_i2-3.tsv", sep = "\t")
+oor_df.to_csv("TSVs/oor_taxonomy.tsv", sep = "\t")
 
 

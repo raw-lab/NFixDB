@@ -1,7 +1,6 @@
-#!/usr/bin/python3
 import pandas as pd
 
-df = pd.DataFrame(pd.read_table('TSVs/tophits_i2-3.tsv'))
+df = pd.DataFrame(pd.read_table('TSVs/tophits.tsv'))
 print("Hits Counts:")
 
 #nifHDK
@@ -46,8 +45,8 @@ print("nif, vnf, and anf: " + str(len(nav)))
 
 #nfl
 n = df[['GenomeID', 
-        'nflD', 'EV_nflD', 'bitscore_nflD', 'alnLen_nflD', 'seqLen_nflD',
-        'nflH', 'EV_nflH', 'bitscore_nflH', 'alnLen_nflH', 'seqLen_nflH',
+        'nflD', 'EV_nflD', 'bitscore_nflD', 'location_nflD', 'alnLen_nflD', 'seqLen_nflD',
+        'nflH', 'EV_nflH', 'bitscore_nflH', 'location_nflH', 'alnLen_nflH', 'seqLen_nflH',
         'GTDB_Tax', 'NCBI_Tax']].copy()
 
 n = n.dropna().reset_index()
@@ -55,9 +54,9 @@ print("nfl: " + str(len(n)))
 
 #Chl
 c = df[['GenomeID', 
-        'ChlN', 'EV_ChlN', 'bitscore_ChlN', 'alnLen_ChlN', 'seqLen_ChlN',
-        'ChIl', 'EV_ChIl', 'bitscore_ChIl', 'alnLen_ChIl', 'seqLen_ChIl',
-        'ChlB', 'EV_ChlB', 'bitscore_ChlB', 'alnLen_ChlB', 'seqLen_ChlB',
+        'ChlN', 'EV_ChlN', 'bitscore_ChlN', 'location_ChlN', 'alnLen_ChlN', 'seqLen_ChlN',
+        'ChIl', 'EV_ChIl', 'bitscore_ChIl', 'location_ChIl', 'alnLen_ChIl', 'seqLen_ChIl',
+        'ChlB', 'EV_ChlB', 'bitscore_ChlB', 'location_ChlB', 'alnLen_ChlB', 'seqLen_ChlB',
         'GTDB_Tax', 'NCBI_Tax']].copy()
 
 c = c.dropna().reset_index()
@@ -77,6 +76,6 @@ print("All: " + str(len(all)))
 dfs = [df.set_index(['GenomeID', 'GTDB_Tax', 'NCBI_Tax']) for df in [nif, vnf, anf, n, c]]
 merged_df = pd.concat(dfs, axis=1).reset_index().drop(columns="index")
 
-merged_df.to_csv("TSVs/filteredhits_i2-3.tsv", sep="\t")
+merged_df.to_csv("TSVs/filteredhits.tsv", sep="\t")
 
 

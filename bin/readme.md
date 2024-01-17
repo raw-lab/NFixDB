@@ -1,6 +1,6 @@
 # Scripts
 
-+ **aligns_hmms.sh** - MAFFT alignments and HMM builds for all files (i2-3)
++ **aligns_hmms.sh** - MAFFT alignments and HMM builds for all files
 
 + **analysis.py** - runs analysis on tophits.tsv, finds which genomes have all three of each group of genes, outputs ***filteredhits.tsv***
 
@@ -20,7 +20,7 @@
 
 + **oDB_hits.py** - similar to tophits.py, find the top result of each sequence ID and outputs ***oDB_hits.tsv***
 
-+ **oDB_hmm.sh** - runs hmmsearch on outside databases using the HMMs produced from i2-3
++ **oDB_cluster-hmm.sh** - runs hmmsearch on 97% clustered outside databases using the HMMs used in database curation
 
 + **sword_alns.sh** - runs SWORD on outside databases
 
@@ -28,9 +28,9 @@
 
 + **sql.py** - creates SQL database of all TSVs
 
-+ **ssu.sh** - runs barrnap on genomes in filteredhits_i2-3.tsv
++ **ssu.sh** - runs barrnap on genomes in filteredhits.tsv
 
-+ **ssu.py** - integrates SSU results into filteredhits_i2-3.tsv. Outputs ***filteredhits_SSU_i2-3.tsv***
++ **ssu.py** - integrates SSU results into filteredhits.tsv. Outputs ***filteredhits_SSU.tsv***
 
 + **taxonomy.py** - finds sequences that are within ≤e-10 cutoff and gets taxonomy of genomes. Outputs ***evalue_taxonomy.tsv*** for those within cutoff range and ***oor_taxonomy.tsv*** for those out of the cutoff range
 
