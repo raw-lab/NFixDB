@@ -39,12 +39,13 @@ for index, row in df3.iterrows():
     topHits_df['GenomeID'] = df3['GenomeID']
     for col in topHits_df.columns:
         if row['GeneName'] == col:
-            ev = "EV_" + col
-            bs = "bitscore_" + col
-            lo = "location_" + col
-            al = "alnLen_" + col
-            sl = "seqLen_" + col
-            topHits_df.loc[topHits_df.GenomeID == row['GenomeID'], [col, ev, bs, lo, al, sl, 'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength'], row['GTDB_Tax'], row['NCBI_TaxID'], row['NCBI_Tax']
+            if row['EValue'] < 9.9e-15 and row['Bitscore'] > 50 and row['AlnLength'] > 125:
+                ev = "EV_" + col
+                bs = "bitscore_" + col
+                lo = "location_" + col
+                al = "alnLen_" + col
+                sl = "seqLen_" + col
+                topHits_df.loc[topHits_df.GenomeID == row['GenomeID'], [col, ev, bs, lo, al, sl, 'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength'], row['GTDB_Tax'], row['NCBI_TaxID'], row['NCBI_Tax']
 
 # Drop duplicates and make a TSV
 topHits_df = topHits_df.drop_duplicates()

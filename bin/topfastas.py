@@ -38,7 +38,7 @@ for index, row in df3.iterrows():
     top_fasta['GenomeID'] = df3['GenomeID']
     for col in top_fasta.columns:
         if row['GeneName'] == col:
-            if row['EValue'] < 9.9e-15 or row['Bitscore'] > 50 or row['AlnLength'] > 125:
+            if row['EValue'] < 9.9e-15 and row['Bitscore'] > 50 and row['AlnLength'] > 125:
                 ev = "EV_" + col
                 bs = "bitscore_" + col
                 lo = "location_" + col
