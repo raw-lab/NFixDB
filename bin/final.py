@@ -1,6 +1,6 @@
 import pandas as pd
 
-filthits = pd.DataFrame(pd.read_table('TSVs/filteredhits_SSU_i2-1.tsv'))
+filthits = pd.DataFrame(pd.read_table('results/TSVs/filteredhits_SSU.tsv'))
 
 final = filthits[['GenomeID', 'nifH', 'EV_nifH', 'bitscore_nifH', 'location_nifH', 'alnLen_nifH', 'seqLen_nifH',
                             'nifD', 'EV_nifD', 'bitscore_nifD', 'location_nifD', 'alnLen_nifD', 'seqLen_nifD',
@@ -18,4 +18,4 @@ final = filthits[['GenomeID', 'nifH', 'EV_nifH', 'bitscore_nifH', 'location_nifH
                             'ChlN', 'EV_ChlN', 'bitscore_ChlN', 'location_ChlN', 'alnLen_ChlN', 'seqLen_ChlN',
                             'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax', '5S', '5.8S', '16S', '23S']]
 
-final.to_csv("TSVs/NFixDB-R2.tsv", sep="\t")  
+final.to_csv("results/TSVs/NFixDB-R2.tsv", sep="\t", index=False)

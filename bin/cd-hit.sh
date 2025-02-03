@@ -1,10 +1,10 @@
 #!/bin/bash
 
-#SBATCH --partition=Orion
+#SBATCH --partition=Draco
 #SBATCH --job-name=cd-hit
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --mem=128GB
+#SBATCH --cpus-per-task=36
+#SBATCH --mem=376GB
 #SBATCH --time=5-0
 #SBATCH -o slurm-%x-%j.out
 #SBATCH --mail-type=END,FAIL,REQUEUE
@@ -21,14 +21,14 @@ echo ""
 module load cd-hit
 
 # Final clusters
-for file in fastas/R2/final/*; do
+for file in data/seeds/final/*; do
    cd-hit -i "$file" -o "clusters/R2/final/$(basename -- $file)_100.faa" -c 1.00
    cd-hit -i "$file" -o "clusters/R2/final/$(basename -- $file)_99.faa" -c 0.99
    cd-hit -i "$file" -o "clusters/R2/final/$(basename -- $file)_97.faa" -c 0.97
 done
 
 # Nucleotide clusters
-for file in fastas/R2/final_nuc/*; do
+for file in data/seeds/final_nuc/*; do
    cd-hit-est -i "$file" -o "clusters/R2/final_nuc/$(basename -- $file)_100.fna" -c 1.00
    cd-hit-est -i "$file" -o "clusters/R2/final_nuc/$(basename -- $file)_99.fna" -c 0.99
    cd-hit-est -i "$file" -o "clusters/R2/final_nuc/$(basename -- $file)_97.fna" -c 0.97

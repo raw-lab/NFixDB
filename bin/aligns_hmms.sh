@@ -1,69 +1,69 @@
 #!/bin/bash
 
-#SBATCH --partition=Orion
-#SBATCH --job-name=all-alns-hmms
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=16
-#SBATCH --mem=128GB
-#SBATCH --time=5-0
-#SBATCH -o slurm-%x-%j.out
-#SBATCH --mail-type=END,FAIL,REQUEUE
+### Program arguments: ###
+SEEDS=$1
+ALIGN_DIR=$2
+HMM_DIR=$3
+CPUS=$4
 
-echo "====================================================="
-echo "Start Time  : $(date)"
-echo "Submit Dir  : $SLURM_SUBMIT_DIR"
-echo "Job ID/Name : $SLURM_JOBID / $SLURM_JOB_NAME"
-echo "Node List   : $SLURM_JOB_NODELIST"
-echo "Num Tasks   : $SLURM_NTASKS total [$SLURM_NNODES nodes @ $SLURM_CPUS_ON_NODE CPUs/node]"
-echo "======================================================"
-echo ""
+mkdir -p $ALIGN_DIR
+mkdir -p $HMM_DIR
+
 
 #anf
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/anfD_12192023.faa > ../alignments/R2/final/anfD-local_aln_i2-2_12192023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/anfH_12192023.faa > ../alignments/R2/final/anfH-local_aln_i2-2_12192023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/anfK_12192023.faa > ../alignments/R2/final/anfK-local_aln_i2-2_12192023.faa
+echo "======================================================"
+echo "Aligning and building anf   : $(date)"
 
-hmmbuild ./HMMs/anfD-local_final_12192023.hmm ../alignments/R2/final/anfD-local_aln_i2-2_12192023.faa
-hmmbuild ./HMMs/anfH-local_final_12192023.hmm ../alignments/R2/final/anfH-local_aln_i2-2_12192023.faa
-hmmbuild ./HMMs/anfK-local_final_12192023.hmm ../alignments/R2/final/anfK-local_aln_i2-2_12192023.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/anfD_121623.faa > $ALIGN_DIR/anfD-aln.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/anfH_121623.faa > $ALIGN_DIR/anfH-aln.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/anfK_121623.faa > $ALIGN_DIR/anfK-aln.faa
+
+hmmbuild --cpu $CPUS $HMM_DIR/anfD.hmm $ALIGN_DIR/anfD-aln.faa
+hmmbuild --cpu $CPUS $HMM_DIR/anfH.hmm $ALIGN_DIR/anfH-aln.faa
+hmmbuild --cpu $CPUS $HMM_DIR/anfK.hmm $ALIGN_DIR/anfK-aln.faa
 
 #nif
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/nifH_12192023.faa > ../alignments/R2/final/nifH-local_aln_i2-2_12192023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/nifD_12192023.faa > ../alignments/R2/final/nifD-local_aln_i2-2_12192023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/nifK_12192023.faa > ../alignments/R2/final/nifK-local_aln_i2-2_12192023.faa
+echo "======================================================"
+echo "Aligning and building nif   : $(date)"
 
-hmmbuild ./HMMs/nifH-local_final_12192023.hmm ../alignments/R2/final/nifH-local_aln_i2-2_12192023.faa
-hmmbuild ./HMMs/nifD-local_final_12192023.hmm ../alignments/R2/final/nifD-local_aln_i2-2_12192023.faa
-hmmbuild ./HMMs/nifK-local_final_12192023.hmm ../alignments/R2/final/nifK-local_aln_i2-2_12192023.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/nifH_121623.faa > $ALIGN_DIR/nifH-aln.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/nifD_121623.faa > $ALIGN_DIR/nifD-aln.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/nifK_121623.faa > $ALIGN_DIR/nifK-aln.faa
+
+hmmbuild --cpu $CPUS $HMM_DIR/nifH.hmm $ALIGN_DIR/nifH-aln.faa
+hmmbuild --cpu $CPUS $HMM_DIR/nifD.hmm $ALIGN_DIR/nifD-aln.faa
+hmmbuild --cpu $CPUS $HMM_DIR/nifK.hmm $ALIGN_DIR/nifK-aln.faa
 
 #vnf
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/vnfD_12192023.faa > ../alignments/R2/final/vnfD-local_aln_i2-2_12192023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/vnfH_12192023.faa > ../alignments/R2/final/vnfH-local_aln_i2-2_12192023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/vnfK_12192023.faa > ../alignments/R2/final/vnfK-local_aln_i2-2_12192023.faa
+echo "======================================================"
+echo "Aligning and building vnf   : $(date)"
 
-hmmbuild ./HMMs/vnfD-local_final_12192023.hmm ../alignments/R2/final/vnfD-local_aln_i2-2_12192023.faa
-hmmbuild ./HMMs/vnfH-local_final_12192023.hmm ../alignments/R2/final/vnfH-local_aln_i2-2_12192023.faa
-hmmbuild ./HMMs/vnfK-local_final_12192023.hmm ../alignments/R2/final/vnfK-local_aln_i2-2_12192023.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/vnfD_121623.faa > $ALIGN_DIR/vnfD-aln.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/vnfH_121623.faa > $ALIGN_DIR/vnfH-aln.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/vnfK_121623.faa > $ALIGN_DIR/vnfK-aln.faa
+
+hmmbuild --cpu $CPUS $HMM_DIR/vnfD.hmm $ALIGN_DIR/vnfD-aln.faa
+hmmbuild --cpu $CPUS $HMM_DIR/vnfH.hmm $ALIGN_DIR/vnfH-aln.faa
+hmmbuild --cpu $CPUS $HMM_DIR/vnfK.hmm $ALIGN_DIR/vnfK-aln.faa
 
 #Chl
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/ChIl_12192023.faa > ../alignments/R2/final/ChIl-local_aln_i2-2_12192023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/ChlN-BchN_12192023.faa > ../alignments/R2/final/ChlN-local_aln_i2-2_12192023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/ChlB-BchB_12192023.faa > ../alignments/R2/final/ChlB-local_aln_i2-2_12192023.faa
+echo "======================================================"
+echo "Aligning and building Chl   : $(date)"
 
-hmmbuild ./HMMs/ChIl-local_final_12192023.hmm ../alignments/R2/final/ChIl-local_aln_i2-2_12192023.faa
-hmmbuild ./HMMs/ChlN-local_final_12192023.hmm ../alignments/R2/final/ChlN-local_aln_i2-2_12192023.faa
-hmmbuild ./HMMs/ChlB-local_final_12192023.hmm ../alignments/R2/final/ChlB-local_aln_i2-2_12192023.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/ChIl-Bchl_121623.faa > $ALIGN_DIR/ChIl-aln.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/ChlN-BchN_121623.faa > $ALIGN_DIR/ChlN-aln.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/ChlB-BchB_121623.faa > $ALIGN_DIR/ChlB-aln.faa
+
+hmmbuild --cpu $CPUS $HMM_DIR/ChIl.hmm $ALIGN_DIR/ChIl-aln.faa
+hmmbuild --cpu $CPUS $HMM_DIR/ChlN.hmm $ALIGN_DIR/ChlN-aln.faa
+hmmbuild --cpu $CPUS $HMM_DIR/ChlB.hmm $ALIGN_DIR/ChlB-aln.faa
 
 #nfl
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/nflD_12192023.faa > ../alignments/R2/final/nflD-local_aln_i2-2_12192023.faa
-mafft --localpair --maxiterate 1000 ../fastas/R2/final/nflH_12192023.faa > ../alignments/R2/final/nflH-local_aln_i2-2_12192023.faa
-
-hmmbuild ./HMMs/nflD-local_final_12192023.hmm ../alignments/R2/final/nflD-local_aln_i2-2_12192023.faa
-hmmbuild ./HMMs/nflH-local_final_12192023.hmm ../alignments/R2/final/nflH-local_aln_i2-2_12192023.faa
-
-echo ""
 echo "======================================================"
-echo "End Time   : $(date)"
-echo "======================================================"
-echo ""
+echo "Aligning and building nfl   : $(date)"
 
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/nflD_121623.faa > $ALIGN_DIR/nflD-aln.faa
+mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/nflH_121623.faa > $ALIGN_DIR/nflH-aln.faa
+
+hmmbuild --cpu $CPUS $HMM_DIR/nflD.hmm $ALIGN_DIR/nflD-aln.faa
+hmmbuild --cpu $CPUS $HMM_DIR/nflH.hmm $ALIGN_DIR/nflH-aln.faa

@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.DataFrame(pd.read_table('TSVs/topfasta.tsv'))
+df = pd.DataFrame(pd.read_table('results/TSVs/topfasta.tsv'))
 print("fasta counts: ")
 
 #nifHDK
@@ -51,7 +51,6 @@ nav = nav.dropna().reset_index()
 print("nif, vnf, and anf: " + str(len(nav)))
 
 dfs = [df.set_index(['GenomeID']) for df in [nif, vnf, anf, n, c]]
-merged_df = pd.concat(dfs, axis=1).reset_index().drop(columns="index")
+merged_df = pd.concat(dfs, axis=1).drop(columns="index")
 
-merged_df.to_csv("TSVs/filteredfasta.tsv", sep="\t")
-
+merged_df.to_csv("results/TSVs/filteredfasta.tsv", sep="\t", index=True, index_label="GenomeID")

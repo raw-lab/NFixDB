@@ -8,7 +8,7 @@ import os
 import re
 
 # Get filteredfasta TSV
-df = pd.DataFrame(pd.read_table('TSVs/filteredfasta.tsv'))
+df = pd.DataFrame(pd.read_table('results/TSVs/filteredfasta.tsv'))
 
 # Make empty lists for each fasta
 nifD = []
@@ -79,7 +79,7 @@ for index, row in df.iterrows():
                         rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
                         ChlB.append(rec)
 
-path = os.path.abspath("fastas/R2/final")
+path = os.path.abspath("results/fastas")
 if not os.path.exists(path):
     os.makedirs(path)
 

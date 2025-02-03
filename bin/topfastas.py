@@ -1,12 +1,16 @@
 #!/usr/bin/python3
 
+"""taxonomy.py
+Loads the taxonomy file and creates a table with matches from hmmsearch.
+"""
+
 import pandas as pd
 
 # Get evalue_taxonomy TSV
-df = pd.DataFrame(pd.read_table('TSVs/evalue_taxonomy.tsv'))
+df = pd.DataFrame(pd.read_table('results/TSVs/evalue_taxonomy.tsv'))
 
 # Take subset of dataframe
-top_fasta = pd.DataFrame(columns=['GenomeID', 
+top_fasta = pd.DataFrame(columns=[
     'nifH', 'EV_nifH', 'bitscore_nifH', 'location_nifH', 'alnLen_nifH', 'seqLen_nifH',
     'nifD', 'EV_nifD', 'bitscore_nifD', 'location_nifD', 'alnLen_nifD', 'seqLen_nifD',
     'nifK', 'EV_nifK', 'bitscore_nifK', 'location_nifK', 'alnLen_nifK', 'seqLen_nifK',
@@ -24,7 +28,7 @@ top_fasta = pd.DataFrame(columns=['GenomeID',
 
 # First sort to find top result for sequence ID (temporary file later deleted)
 df2 = df.groupby(["GenomeID", "SeqID"]).first()
-df2 = df2.sort_values("EValue").drop(columns="Unnamed: 0")
+df2 = df2.sort_values("EValue")
 df2.to_csv("fasta_temp.tsv", sep = "\t")
 
 # Second sort to find top result for sequence ID and gene (temporary file later deleted)
@@ -35,19 +39,16 @@ df3 = pd.DataFrame(pd.read_table('fasta_temp2.tsv'))
 
 # Loop through top hits dataframe to put it in the dictionary in the corressponding columns
 for index, row in df3.iterrows():
-    top_fasta['GenomeID'] = df3['GenomeID']
     for col in top_fasta.columns:
         if row['GeneName'] == col:
-            if row['EValue'] < 9.9e-15 and row['Bitscore'] > 50 and row['AlnLength'] > 125:
+            if row['EValue'] < 9.9e-15 or row['Bitscore'] > 50 or row['AlnLength'] > 125:
                 ev = "EV_" + col
                 bs = "bitscore_" + col
                 lo = "location_" + col
                 al = "alnLen_" + col
                 sl = "seqLen_" + col
-                top_fasta.loc[top_fasta.GenomeID == row['GenomeID'], [col, ev, bs, lo, al, sl]] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength']
+                top_fasta.at[row['GenomeID'], [col, ev, bs, lo, al, sl]] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength']
 
 # Drop duplicates and make a TSV
 top_fasta = top_fasta.drop_duplicates().dropna(thresh=7)
-top_fasta.to_csv("TSVs/topfasta.tsv", sep = "\t")
-
-
+top_fasta.to_csv("results/TSVs/topfasta.tsv", sep = "\t", index=True, index_label="GenomeID")

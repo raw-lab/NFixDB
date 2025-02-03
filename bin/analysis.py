@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.DataFrame(pd.read_table('TSVs/tophits.tsv'))
+df = pd.DataFrame(pd.read_table('results/TSVs/tophits.tsv'))
 print("Hits Counts:")
 
 #nifHDK
@@ -8,9 +8,9 @@ nif = df[['GenomeID',
           'nifH', 'EV_nifH', 'bitscore_nifH', 'location_nifH', 'alnLen_nifH', 'seqLen_nifH',
           'nifD', 'EV_nifD', 'bitscore_nifD', 'location_nifD', 'alnLen_nifD', 'seqLen_nifD',
           'nifK', 'EV_nifK', 'bitscore_nifK', 'location_nifK', 'alnLen_nifK', 'seqLen_nifK',
-          'GTDB_Tax', 'NCBI_Tax']].copy()
+          'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']].copy()
 
-nif = nif.dropna().reset_index()
+nif = nif.dropna().reset_index(drop=True)
 print("nifHDK: " + str(len(nif)))
 
 #vnfHDK
@@ -18,9 +18,9 @@ vnf = df[['GenomeID',
           'vnfH', 'EV_vnfH', 'bitscore_vnfH', 'location_vnfH', 'alnLen_vnfH', 'seqLen_vnfH',
           'vnfD', 'EV_vnfD', 'bitscore_vnfD', 'location_vnfD', 'alnLen_vnfD', 'seqLen_vnfD',
           'vnfK', 'EV_vnfK', 'bitscore_vnfK', 'location_vnfK', 'alnLen_vnfK', 'seqLen_vnfK',
-          'GTDB_Tax', 'NCBI_Tax']].copy()
+          'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']].copy()
 
-vnf = vnf.dropna().reset_index()
+vnf = vnf.dropna().reset_index(drop=True)
 print("vnf: " + str(len(vnf)))
 
 #anfHDK
@@ -28,9 +28,9 @@ anf = df[['GenomeID',
           'anfH', 'EV_anfH', 'bitscore_anfH', 'location_anfH', 'alnLen_anfH', 'seqLen_anfH',
           'anfD', 'EV_anfD', 'bitscore_anfD', 'location_anfD', 'alnLen_anfD', 'seqLen_anfD',
           'anfK', 'EV_anfK', 'bitscore_anfK', 'location_anfK', 'alnLen_anfK', 'seqLen_anfK',
-          'GTDB_Tax', 'NCBI_Tax']].copy()
+          'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']].copy()
 
-anf = anf.dropna().reset_index()
+anf = anf.dropna().reset_index(drop=True)
 print("anf: " + str(len(anf)))
 
 #nif, vnf, anf
@@ -38,18 +38,18 @@ nav = df[['GenomeID',
           'nifH', 'EV_nifH', 'nifD', 'EV_nifD', 'nifK', 'EV_nifK',
           'anfD', 'EV_anfD', 'anfH', 'EV_anfH', 'anfK', 'EV_anfK',
           'vnfD', 'EV_vnfD', 'vnfH', 'EV_vnfH', 'vnfK', 'EV_vnfK', 
-          'GTDB_Tax', 'NCBI_Tax']].copy()
+          'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']].copy()
 
-nav = nav.dropna().reset_index()
+nav = nav.dropna().reset_index(drop=True)
 print("nif, vnf, and anf: " + str(len(nav)))
 
 #nfl
 n = df[['GenomeID', 
         'nflD', 'EV_nflD', 'bitscore_nflD', 'location_nflD', 'alnLen_nflD', 'seqLen_nflD',
         'nflH', 'EV_nflH', 'bitscore_nflH', 'location_nflH', 'alnLen_nflH', 'seqLen_nflH',
-        'GTDB_Tax', 'NCBI_Tax']].copy()
+        'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']].copy()
 
-n = n.dropna().reset_index()
+n = n.dropna().reset_index(drop=True)
 print("nfl: " + str(len(n)))
 
 #Chl
@@ -57,9 +57,9 @@ c = df[['GenomeID',
         'ChlN', 'EV_ChlN', 'bitscore_ChlN', 'location_ChlN', 'alnLen_ChlN', 'seqLen_ChlN',
         'ChIl', 'EV_ChIl', 'bitscore_ChIl', 'location_ChIl', 'alnLen_ChIl', 'seqLen_ChIl',
         'ChlB', 'EV_ChlB', 'bitscore_ChlB', 'location_ChlB', 'alnLen_ChlB', 'seqLen_ChlB',
-        'GTDB_Tax', 'NCBI_Tax']].copy()
+        'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']].copy()
 
-c = c.dropna().reset_index()
+c = c.dropna().reset_index(drop=True)
 print("Chl: " + str(len(c)))
 
 #all of them
@@ -70,12 +70,9 @@ all = df[['GenomeID',
           'nflD', 'nflH',
           'ChlN', 'ChIl', 'ChlB']].copy()
 
-all = all.dropna().reset_index()
+all = all.dropna().reset_index(drop=True)
 print("All: " + str(len(all)))
 
-dfs = [df.set_index(['GenomeID', 'GTDB_Tax', 'NCBI_Tax']) for df in [nif, vnf, anf, n, c]]
-merged_df = pd.concat(dfs, axis=1).reset_index().drop(columns="index")
-
-merged_df.to_csv("TSVs/filteredhits.tsv", sep="\t")
-
-
+dfs = [df.set_index(['GenomeID', 'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']) for df in [nif, vnf, anf, n, c]]
+merged_df = pd.concat(dfs, axis=1).reset_index(drop=False)
+merged_df.to_csv("results/TSVs/filteredhits.tsv", sep="\t", index=False)
