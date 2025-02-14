@@ -1,6 +1,20 @@
+#!/usr/bin/env python
+
+"""analysis.py
+Filters top hits and finds which genomes have all three of each group of genes.
+"""
+
+import argparse
 import pandas as pd
 
-df = pd.DataFrame(pd.read_table('results/TSVs/tophits.tsv'))
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', '--input', type=str, default='results/i1/TSVs/tophits.tsv', help="Path to the tophits.tsv file")
+parser.add_argument('-o', '--output', type=str, default='results/i1/TSVs/filteredhits.tsv', help="Path to the output file filteredhits.tsv")
+
+args = parser.parse_args()
+
+
+df = pd.DataFrame(pd.read_table(args.input))
 print("Hits Counts:")
 
 #nifHDK
@@ -75,4 +89,4 @@ print("All: " + str(len(all)))
 
 dfs = [df.set_index(['GenomeID', 'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']) for df in [nif, vnf, anf, n, c]]
 merged_df = pd.concat(dfs, axis=1).reset_index(drop=False)
-merged_df.to_csv("results/TSVs/filteredhits.tsv", sep="\t", index=False)
+merged_df.to_csv(args.output, sep="\t", index=False)

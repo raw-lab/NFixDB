@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import argparse
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -7,8 +8,16 @@ import pandas as pd
 import os
 import re
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', '--input', type=str, default='results/i1/TSVs/filteredfasta.tsv', help="Path to filteredfasta.tsv")
+parser.add_argument('-o', '--output', type=str, default='results/i1/fasta', help="Path to the output folder to save fasta files")
+parser.add_argument('-g', '--gtdb', type=str, help="Path to the GTDB folder", required=True)
+
+args = parser.parse_args()
+
+
 # Get filteredfasta TSV
-df = pd.DataFrame(pd.read_table('results/TSVs/filteredfasta.tsv'))
+df = pd.DataFrame(pd.read_table(args.input))
 
 # Make empty lists for each fasta
 nifD = []
@@ -27,7 +36,7 @@ ChIl = []
 ChlB = []
 
 # Create fasta lists by column name
-directory = '/projects/raw_lab/databases/GTDB/protein_faa_reps_r214-combined' 
+directory = args.gtdb
 for index, row in df.iterrows():
     for file in os.listdir(directory):
         f = os.path.join(directory, file)
@@ -79,7 +88,7 @@ for index, row in df.iterrows():
                         rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
                         ChlB.append(rec)
 
-path = os.path.abspath("results/fastas")
+path = os.path.abspath(args.output)
 if not os.path.exists(path):
     os.makedirs(path)
 

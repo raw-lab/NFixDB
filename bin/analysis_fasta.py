@@ -1,6 +1,14 @@
+import argparse
 import pandas as pd
 
-df = pd.DataFrame(pd.read_table('results/TSVs/topfasta.tsv'))
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', '--input', type=str, default='results/i1/TSVs/topfasta.tsv', help="Path to the topfasta.tsv file")
+parser.add_argument('-o', '--output', type=str, default='results/i1/TSVs/filteredfasta.tsv', help="Path to the output file filteredfasta.tsv")
+
+args = parser.parse_args()
+
+
+df = pd.DataFrame(pd.read_table(args.input))
 print("fasta counts: ")
 
 #nifHDK
@@ -53,4 +61,4 @@ print("nif, vnf, and anf: " + str(len(nav)))
 dfs = [df.set_index(['GenomeID']) for df in [nif, vnf, anf, n, c]]
 merged_df = pd.concat(dfs, axis=1).drop(columns="index")
 
-merged_df.to_csv("results/TSVs/filteredfasta.tsv", sep="\t", index=True, index_label="GenomeID")
+merged_df.to_csv(args.output, sep="\t", index=True, index_label="GenomeID")

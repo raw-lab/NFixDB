@@ -1,6 +1,13 @@
+import argparse
 import pandas as pd
 
-filthits = pd.DataFrame(pd.read_table('results/TSVs/filteredhits_SSU.tsv'))
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', '--input', type=str, default='results/i1/TSVs/filteredhits_SSU.tsv', help="Path to filteredhits_SSU.tsv")
+parser.add_argument('-o', '--output', type=str, default='results/i1/TSVs/NFixDB.tsv', help="Path to the final TSV file NFixDB.tsv")
+
+args = parser.parse_args()
+
+filthits = pd.DataFrame(pd.read_table(args.input))
 
 final = filthits[['GenomeID', 'nifH', 'EV_nifH', 'bitscore_nifH', 'location_nifH', 'alnLen_nifH', 'seqLen_nifH',
                             'nifD', 'EV_nifD', 'bitscore_nifD', 'location_nifD', 'alnLen_nifD', 'seqLen_nifD',
@@ -18,4 +25,4 @@ final = filthits[['GenomeID', 'nifH', 'EV_nifH', 'bitscore_nifH', 'location_nifH
                             'ChlN', 'EV_ChlN', 'bitscore_ChlN', 'location_ChlN', 'alnLen_ChlN', 'seqLen_ChlN',
                             'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax', '5S', '5.8S', '16S', '23S']]
 
-final.to_csv("results/TSVs/NFixDB-R2.tsv", sep="\t", index=False)
+final.to_csv(args.output, sep="\t", index=False)

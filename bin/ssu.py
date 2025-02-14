@@ -1,10 +1,20 @@
 #!/usr/bin/python3
 
-import pandas as pd
 import os
+import argparse
+import pandas as pd
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', '--input', type=str, default='results/i1/TSVs/filteredhits.tsv', help="Path to the filteredhits.tsv file")
+parser.add_argument('-o', '--output', type=str, default='results/i1/TSVs/filteredhits_SSU.tsv', help="Path to the output file filteredhits_SSU.tsv")
+parser.add_argument('-s', '--ssu', type=str, default='results/i1/SSUs', help="Path to the output folder containing Barnap results")
+
+args = parser.parse_args()
+
 
 # Get filteredhits TSV
-df = pd.DataFrame(pd.read_table('results/TSVs/filteredhits.tsv'))
+df = pd.DataFrame(pd.read_table(args.input))
 
 # Create empty lists for each SSU
 s5 = []
@@ -15,7 +25,7 @@ s23 = []
 ssu = pd.DataFrame(columns=['GenomeID', '5S', '5.8S', '16S', '23S'])
 
 # Populate SSU dataframe with SSUs that correspond to the genome ID
-directory = 'results/SSUs'
+directory = args.ssu
 for index, row in df.iterrows():
     ssu['GenomeID'] = df['GenomeID']
     for file in os.listdir(directory):
@@ -46,4 +56,4 @@ for index, row in df.iterrows():
 
 # Convert to TSV
 final_df = pd.merge(df, ssu, on = "GenomeID", how="left")
-final_df.to_csv("results/TSVs/filteredhits_SSU.tsv", sep = "\t", index=False)
+final_df.to_csv(args.output, sep = "\t", index=False)
