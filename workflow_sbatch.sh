@@ -62,6 +62,7 @@ conda activate NFixDB
 CPUS=$SLURM_CPUS_PER_TASK
 
 export GTDB_PATH="/projects/raw_lab/databases/GTDB/protein_faa_reps_r214-combined"
+export GTDB_FNA="/projects/raw_lab/databases/GTDB/protein_fna_reps_r214-combined"
 
 SEEDS="data/seeds/initial"
 RESULTS=results/i1
@@ -80,30 +81,30 @@ mkdir -p $OUTFASTA
 mkdir -p $OUTSSU
 
 
-#echo "======================================================"
-#echo "Aligning fastas and creating HMMs   : $(date)"
-#echo "======================================================"
-#command time bash bin/aligns_hmms.sh $SEEDS $ALIGN_DIR $HMM_DIR $CPUS >log01-align.txt
-#
-#echo "======================================================"
-#echo "hmmsearch   : $(date)"
-#echo "======================================================"
-#command time bash bin/hmmsearch.sh $HMM_DIR $OUTDIR $GTDB_PATH $CPUS >log02-hmmsearch.txt
-#
-#echo "======================================================"
-#echo "Taxonomy   : $(date)"
-#echo "======================================================"
-#command time python bin/taxonomy.py --hitpath $OUTDIR --outfile $OUTTSV/evalue_taxonomy.tsv  >log03-taxonomy.txt
-#
-#echo "======================================================"
-#echo "Top hits   : $(date)"
-#echo "======================================================"
-#command time python bin/tophits.py -i $OUTTSV/evalue_taxonomy.tsv -o $OUTTSV >log04-top_hits.txt
-#
-#echo "======================================================"
-#echo "Top hit analysis   : $(date)"
-#echo "======================================================"
-#command time python bin/analysis.py --input $OUTTSV/tophits.tsv --output $OUTTSV/filteredhits.tsv
+echo "======================================================"
+echo "Aligning fastas and creating HMMs   : $(date)"
+echo "======================================================"
+command time bash bin/aligns_hmms.sh $SEEDS $ALIGN_DIR $HMM_DIR $CPUS >log01-align.txt
+
+echo "======================================================"
+echo "hmmsearch   : $(date)"
+echo "======================================================"
+command time bash bin/hmmsearch.sh $HMM_DIR $OUTDIR $GTDB_PATH $CPUS >log02-hmmsearch.txt
+
+echo "======================================================"
+echo "Taxonomy   : $(date)"
+echo "======================================================"
+command time python bin/taxonomy.py --hitpath $OUTDIR --outfile $OUTTSV/evalue_taxonomy.tsv  >log03-taxonomy.txt
+
+echo "======================================================"
+echo "Top hits   : $(date)"
+echo "======================================================"
+command time python bin/tophits.py -i $OUTTSV/evalue_taxonomy.tsv -o $OUTTSV >log04-top_hits.txt
+
+echo "======================================================"
+echo "Top hit analysis   : $(date)"
+echo "======================================================"
+command time python bin/analysis.py --input $OUTTSV/tophits.tsv --output $OUTTSV/filteredhits.tsv
 
 echo "======================================================"
 echo "Top fastas analysis   : $(date)"
@@ -118,7 +119,7 @@ command time python bin/nitrogenase_fastas.py --input $OUTTSV/filteredfasta.tsv 
 echo "======================================================"
 echo "SSU   : $(date)"
 echo "======================================================"
-command time bash bin/ssu.sh $OUTTSV/filteredhits.tsv $OUTSSU
+command time bash bin/ssu.sh $OUTTSV/filteredhits.tsv $OUTSSU >log05-ssu.txt
 echo "Running ssu.py..."
 command time python3 bin/ssu.py --input $OUTTSV/filteredhits.tsv --output $OUTTSV/filteredhits_SSU.tsv --ssu $OUTSSU
 echo "SSU all Done"
@@ -163,22 +164,22 @@ mkdir -p $OUTSSU
 echo "======================================================"
 echo "Aligning fastas and creating HMMs   : $(date)"
 echo "======================================================"
-command time bash bin/aligns_hmms.sh $SEEDS $ALIGN_DIR $HMM_DIR $CPUS >log01-align2.txt
+command time bash bin/aligns_hmms.sh $SEEDS $ALIGN_DIR $HMM_DIR $CPUS >log-i2-01-align2.txt
 
 echo "======================================================"
 echo "hmmsearch   : $(date)"
 echo "======================================================"
-command time bash bin/hmmsearch.sh $HMM_DIR $OUTDIR $GTDB_PATH $CPUS >log02-hmmsearch2.txt
+command time bash bin/hmmsearch.sh $HMM_DIR $OUTDIR $GTDB_PATH $CPUS >log-i2-02-hmmsearch2.txt
 
 echo "======================================================"
 echo "Taxonomy   : $(date)"
 echo "======================================================"
-command time python bin/taxonomy.py --hitpath $OUTDIR --outfile $OUTTSV/evalue_taxonomy.tsv  >log03-taxonomy2.txt
+command time python bin/taxonomy.py --hitpath $OUTDIR --outfile $OUTTSV/evalue_taxonomy.tsv  >log-i2-03-taxonomy2.txt
 
 echo "======================================================"
 echo "Top hits   : $(date)"
 echo "======================================================"
-command time python bin/tophits.py -i $OUTTSV/evalue_taxonomy.tsv -o $OUTTSV >log04-top_hits2.txt
+command time python bin/tophits.py -i $OUTTSV/evalue_taxonomy.tsv -o $OUTTSV >log-i2-04-top_hits2.txt
 
 echo "======================================================"
 echo "Top hit analysis   : $(date)"
@@ -218,7 +219,7 @@ command time python bin/sql.py --input $OUTTSV --output $OUTTSV/NFixDB.db
 echo ""
 echo "======================================================"
 echo "End Time   : $(date)"
-echo "Run Time   : $SECONDS"
+echo "Run Time   : $SECONDS seconds"
 echo "======================================================"
 echo ""
 
