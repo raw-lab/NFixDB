@@ -17,7 +17,7 @@ echo "Running barrnap..."
 echo "Running barrnap on Genomes in GTDB" > barrnap-filter.log
 for g in $genomes
 do
-    cat $GTDB_PATH/"$g"_protein.fna | barrnap -o $OUTPATH/"$g".faa --threads $SLURM_CPUS_ON_NODE >>barrnap-filter.log
+    cat $GTDB_FNA/"$g"_protein.fna | barrnap -o $OUTPATH/"$g".faa --threads $SLURM_CPUS_ON_NODE &>>log-barrnap-filter.log
 done
 
 echo "Done"
