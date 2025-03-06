@@ -1,12 +1,12 @@
 #!/bin/bash
 
-#SBATCH --partition=Draco
+#SBATCH --partition=Orion
 #SBATCH --job-name=NFixDB-Workflow
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=36
+#SBATCH --cpus-per-task=1
 #SBATCH --mem=0
-#SBATCH --time=2-0
+#SBATCH --time=5-0
 #SBATCH -o slurm-%x-%j.out
 #SBATCH --mail-type=END,FAIL,REQUEUE
 
@@ -29,8 +29,12 @@
 # The SBATCH settings above will need to be
 # modified for your environment.
 # The dependencies will need to be loaded through
-# a server module or an Anaconda environment
+# a server module or an Anaconda environment.
 # 
+# Before running, make sure that the GTDB_PATH
+# and GTDB_FNA point to a valid path containing
+# the protein and nucleotide, reference files from
+# GTDB, respectively.
 
 if [ -z "$SLURM_CPUS_ON_NODE" ]
 then
@@ -61,8 +65,9 @@ conda activate NFixDB
 
 CPUS=$SLURM_CPUS_PER_TASK
 
-export GTDB_PATH="/projects/raw_lab/databases/GTDB/protein_faa_reps_r214-combined"
-export GTDB_FNA="/projects/raw_lab/databases/GTDB/protein_fna_reps_r214-combined"
+export GTDB_PATH="/projects/raw_lab/databases/GTDB/v220/protein_faa_reps"
+export GTDB_FNA="/projects/raw_lab/databases/GTDB/v220/protein_fna_reps"
+
 
 SEEDS="data/seeds/initial"
 RESULTS=results/i1
@@ -72,6 +77,7 @@ OUTDIR=$RESULTS/bac120_ar53
 OUTTSV=$RESULTS/TSVs
 OUTFASTA=$RESULTS/fastas
 OUTSSU=$RESULTS/SSUs
+LOG=$RESULTS/log
 
 mkdir -p $ALIGN_DIR
 mkdir -p $HMM_DIR
@@ -79,60 +85,71 @@ mkdir -p $OUTDIR
 mkdir -p $OUTTSV
 mkdir -p $OUTFASTA
 mkdir -p $OUTSSU
+mkdir -p $LOG
 
 
 echo "======================================================"
-echo "Aligning fastas and creating HMMs   : $(date)"
+echo "Aligning fastas and creating HMMs"
+echo "$(date)"
 echo "======================================================"
-command time bash bin/aligns_hmms.sh $SEEDS $ALIGN_DIR $HMM_DIR $CPUS >log01-align.txt
+time (command time bash bin/aligns_hmms.sh $SEEDS $ALIGN_DIR $HMM_DIR $CPUS &>$LOG/01-align.txt)
 
 echo "======================================================"
-echo "hmmsearch   : $(date)"
+echo "hmmsearch"
+echo "$(date)"
 echo "======================================================"
-command time bash bin/hmmsearch.sh $HMM_DIR $OUTDIR $GTDB_PATH $CPUS >log02-hmmsearch.txt
+time (command time bash bin/hmmsearch.sh $HMM_DIR $OUTDIR $GTDB_PATH $CPUS &>$LOG/02-hmmsearch.txt)
 
 echo "======================================================"
-echo "Taxonomy   : $(date)"
+echo "Taxonomy"
+echo "$(date)"
 echo "======================================================"
-command time python bin/taxonomy.py --hitpath $OUTDIR --outfile $OUTTSV/evalue_taxonomy.tsv  >log03-taxonomy.txt
+command time python bin/taxonomy.py --hitpath $OUTDIR --outfile $OUTTSV/evalue_taxonomy.tsv  >$LOG/03-taxonomy.txt
 
 echo "======================================================"
-echo "Top hits   : $(date)"
+echo "Top hits"
+echo "$(date)"
 echo "======================================================"
-command time python bin/tophits.py -i $OUTTSV/evalue_taxonomy.tsv -o $OUTTSV >log04-top_hits.txt
+command time python bin/tophits.py -i $OUTTSV/evalue_taxonomy.tsv -o $OUTTSV >$LOG/04-top_hits.txt
 
 echo "======================================================"
-echo "Top hit analysis   : $(date)"
+echo "Top hit analysis"
+echo "$(date)"
 echo "======================================================"
-command time python bin/analysis.py --input $OUTTSV/tophits.tsv --output $OUTTSV/filteredhits.tsv
+command time python bin/analysis.py --input $OUTTSV/tophits.tsv --output $OUTTSV/filteredhits.tsv >$LOG/05-hit_analysis.txt
 
 echo "======================================================"
-echo "Top fastas analysis   : $(date)"
+echo "Top fastas analysis"
+echo "$(date)"
 echo "======================================================"
-command time python bin/analysis_fasta.py --input $OUTTSV/topfasta.tsv --output $OUTTSV/filteredfasta.tsv
+command time python bin/analysis_fasta.py --input $OUTTSV/topfasta.tsv --output $OUTTSV/filteredfasta.tsv >$LOG/06-fasta_analysis.txt
 
 echo "======================================================"
-echo "Nitrogenase   : $(date)"
+echo "Nitrogenase"
+echo "$(date)"
 echo "======================================================"
-command time python bin/nitrogenase_fastas.py --input $OUTTSV/filteredfasta.tsv --output $OUTFASTA --gtdb $GTDB_PATH
+command time python bin/nitrogenase_fastas.py --input $OUTTSV/filteredfasta.tsv --output $OUTFASTA --gtdb $GTDB_PATH >$LOG/07-nitrogenase.txt
 
 echo "======================================================"
-echo "SSU   : $(date)"
+echo "SSU"
+echo "$(date)"
 echo "======================================================"
-command time bash bin/ssu.sh $OUTTSV/filteredhits.tsv $OUTSSU >log05-ssu.txt
+command time bash bin/ssu.sh $OUTTSV/filteredhits.tsv $OUTSSU >$LOG/07-ssu.txt
 echo "Running ssu.py..."
-command time python3 bin/ssu.py --input $OUTTSV/filteredhits.tsv --output $OUTTSV/filteredhits_SSU.tsv --ssu $OUTSSU
+command time python3 bin/ssu.py --input $OUTTSV/filteredhits.tsv --output $OUTTSV/filteredhits_SSU.tsv --ssu $OUTSSU >>$LOG/08-ssu.txt
 echo "SSU all Done"
 
 echo "======================================================"
-echo "Final TSV   : $(date)"
+echo "Final TSV"
+echo "$(date)"
 echo "======================================================"
-command time python bin/final.py --input $OUTTSV/filteredhits_SSU.tsv --output $OUTTSV/NFixDB.tsv
+command time python bin/final.py --input $OUTTSV/filteredhits_SSU.tsv --output $OUTTSV/NFixDB.tsv >$LOG/09-final.txt
 
 echo "======================================================"
-echo "Create final SQL   : $(date)"
+echo "Create final SQL"
+echo "$(date)"
 echo "======================================================"
-command time python bin/sql.py --input $OUTTSV --output $OUTTSV/NFixDB.db
+command time python bin/sql.py --input $OUTTSV --output $OUTTSV/NFixDB.db >$LOG/10-final_sql.txt
 
 
 echo
@@ -151,6 +168,7 @@ OUTDIR=$RESULTS/bac120_ar53
 OUTTSV=$RESULTS/TSVs
 OUTFASTA=$RESULTS/fastas
 OUTSSU=$RESULTS/SSUs
+LOG=$RESULTS/log
 
 
 mkdir -p $ALIGN_DIR
@@ -159,60 +177,71 @@ mkdir -p $OUTDIR
 mkdir -p $OUTTSV
 mkdir -p $OUTFASTA
 mkdir -p $OUTSSU
+mkdir -p $LOG
 
 
 echo "======================================================"
-echo "Aligning fastas and creating HMMs   : $(date)"
+echo "Aligning fastas and creating HMMs"
+echo "$(date)"
 echo "======================================================"
-command time bash bin/aligns_hmms.sh $SEEDS $ALIGN_DIR $HMM_DIR $CPUS >log-i2-01-align2.txt
+time (command time bash bin/aligns_hmms.sh $SEEDS $ALIGN_DIR $HMM_DIR $CPUS &>$LOG/01-align.txt)
 
 echo "======================================================"
-echo "hmmsearch   : $(date)"
+echo "hmmsearch"
+echo "$(date)"
 echo "======================================================"
-command time bash bin/hmmsearch.sh $HMM_DIR $OUTDIR $GTDB_PATH $CPUS >log-i2-02-hmmsearch2.txt
+time (command time bash bin/hmmsearch.sh $HMM_DIR $OUTDIR $GTDB_PATH $CPUS &>$LOG/02-hmmsearch.txt)
 
 echo "======================================================"
-echo "Taxonomy   : $(date)"
+echo "Taxonomy"
+echo "$(date)"
 echo "======================================================"
-command time python bin/taxonomy.py --hitpath $OUTDIR --outfile $OUTTSV/evalue_taxonomy.tsv  >log-i2-03-taxonomy2.txt
+command time python bin/taxonomy.py --hitpath $OUTDIR --outfile $OUTTSV/evalue_taxonomy.tsv  >$LOG/03-taxonomy.txt
 
 echo "======================================================"
-echo "Top hits   : $(date)"
+echo "Top hits"
+echo "$(date)"
 echo "======================================================"
-command time python bin/tophits.py -i $OUTTSV/evalue_taxonomy.tsv -o $OUTTSV >log-i2-04-top_hits2.txt
+command time python bin/tophits.py -i $OUTTSV/evalue_taxonomy.tsv -o $OUTTSV >$LOG/04-top_hits.txt
 
 echo "======================================================"
-echo "Top hit analysis   : $(date)"
+echo "Top hit analysis"
+echo "$(date)"
 echo "======================================================"
-command time python bin/analysis.py --input $OUTTSV/tophits.tsv --output $OUTTSV/filteredhits.tsv
+command time python bin/analysis.py --input $OUTTSV/tophits.tsv --output $OUTTSV/filteredhits.tsv >$LOG/05-hit_analysis.txt
 
 echo "======================================================"
-echo "Top fastas analysis   : $(date)"
+echo "Top fastas analysis"
+echo "$(date)"
 echo "======================================================"
-command time python bin/analysis_fasta.py --input $OUTTSV/topfasta.tsv --output $OUTTSV/filteredfasta.tsv
+command time python bin/analysis_fasta.py --input $OUTTSV/topfasta.tsv --output $OUTTSV/filteredfasta.tsv >$LOG/06-fasta_analysis.txt
 
 echo "======================================================"
-echo "Nitrogenase   : $(date)"
+echo "Nitrogenase"
+echo "$(date)"
 echo "======================================================"
-command time python bin/nitrogenase_fastas.py --input $OUTTSV/filteredfasta.tsv --output $OUTFASTA --gtdb $GTDB_PATH
+command time python bin/nitrogenase_fastas.py --input $OUTTSV/filteredfasta.tsv --output $OUTFASTA --gtdb $GTDB_PATH >$LOG/07-nitrogenase.txt
 
 echo "======================================================"
-echo "SSU   : $(date)"
+echo "SSU"
+echo "$(date)"
 echo "======================================================"
-command time bash bin/ssu.sh $OUTTSV/filteredhits.tsv $OUTSSU
+command time bash bin/ssu.sh $OUTTSV/filteredhits.tsv $OUTSSU >$LOG/07-ssu.txt
 echo "Running ssu.py..."
-command time python3 bin/ssu.py --input $OUTTSV/filteredhits.tsv --output $OUTTSV/filteredhits_SSU.tsv --ssu $OUTSSU
+command time python3 bin/ssu.py --input $OUTTSV/filteredhits.tsv --output $OUTTSV/filteredhits_SSU.tsv --ssu $OUTSSU >>$LOG/08-ssu.txt
 echo "SSU all Done"
 
 echo "======================================================"
-echo "Final TSV   : $(date)"
+echo "Final TSV"
+echo "$(date)"
 echo "======================================================"
-command time python bin/final.py --input $OUTTSV/filteredhits_SSU.tsv --output $OUTTSV/NFixDB.tsv
+command time python bin/final.py --input $OUTTSV/filteredhits_SSU.tsv --output $OUTTSV/NFixDB.tsv >$LOG/09-final.txt
 
 echo "======================================================"
-echo "Create final SQL   : $(date)"
+echo "Create final SQL"
+echo "$(date)"
 echo "======================================================"
-command time python bin/sql.py --input $OUTTSV --output $OUTTSV/NFixDB.db
+command time python bin/sql.py --input $OUTTSV --output $OUTTSV/NFixDB.db >$LOG/10-final_sql.txt
 
 
 
