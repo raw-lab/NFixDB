@@ -9,15 +9,17 @@ mkdir -p results/SSUs
 
 genomes=$(cut -f1 $INPUT) #column with genome IDs (GB_GCA_018902765.1)
 
-#module load anaconda3
-#conda activate barrnap 
-
 echo "Running barrnap..."
 #TODO: Should we differentiate bacteria from archaea in barrnap?
-echo "Running barrnap on Genomes in GTDB" > barrnap-filter.log
+echo "Running barrnap on Genomes in GTDB"
 for g in $genomes
 do
-    cat $GTDB_FNA/"$g"_protein.fna | barrnap -o $OUTPATH/"$g".faa --threads $SLURM_CPUS_ON_NODE &>>log-barrnap-filter.log
+    if  [ -f $GTDB_FNA/archaea/"$g"_protein.fna.gz ] ; then
+    	echo ARCHAEA "$g" >barrnap.log
+        zcat $GTDB_FNA/archaea/"$g"_protein.fna.gz | barrnap -o $OUTPATH/"$g".faa --kingdom arc --threads $SLURM_CPUS_ON_NODE
+    elif [ -f $GTDB_FNA/bacteria/"$g"_protein.fna.gz ] ; then
+         zcat $GTDB_FNA/bacteria/"$g"_protein.fna.gz | barrnap -o $OUTPATH/"$g".faa --kingdom bac --threads $SLURM_CPUS_ON_NODE
+    fi
 done
 
 echo "Done"
