@@ -101,5 +101,5 @@ oor_dict = {'GenomeID' : oor_target, 'GeneName' : oor_queryid, 'SeqID' : oor_hit
             'Location' : oor_location, 'AlnLength' : oor_alength, 'SeqLength' : oor_slength}
 oor_df = pd.DataFrame(oor_dict).sort_values('EValue')
 oor_df = pd.merge(oor_df, complete_df, on = "GenomeID", how = "left").drop_duplicates()
-outfile = outfile.with_stem("oor_taxonomy")
+outfile = outfile.with_name("oor_taxonomy.tsv")
 oor_df.to_csv(outfile, sep = "\t", index=False)
