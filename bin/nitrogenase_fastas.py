@@ -1,12 +1,14 @@
 #!/usr/bin/python3
 
 import argparse
+from pathlib import Path
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import pandas as pd
 import os
 import re
+import gzip
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input', type=str, default='results/i1/TSVs/filteredfasta.tsv', help="Path to filteredfasta.tsv")
@@ -19,95 +21,99 @@ args = parser.parse_args()
 # Get filteredfasta TSV
 df = pd.DataFrame(pd.read_table(args.input))
 
-# Make empty lists for each fasta
-nifD = []
-nifH = []
-nifK = [] 
-anfD = []
-anfH = []
-anfK = []
-vnfD = []
-vnfH = []
-vnfK = []
-nflD = []
-nflH = []
-ChlN = [] 
-ChIl = []
-ChlB = []
-
-# Create fasta lists by column name
-directory = args.gtdb
-for index, row in df.iterrows():
-    for file in os.listdir(directory):
-        f = os.path.join(directory, file)
-        if os.path.isfile(f):
-            reg = r'^([\w]+_[\w]+.[\w])'
-            regex = re.match(reg, file).group()
-            if regex == row['GenomeID']:
-                for fasta in SeqIO.parse(f, 'fasta'):
-                    if fasta.id == row['nifD']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        nifD.append(rec)
-                    elif fasta.id == row['nifH']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        nifH.append(rec)
-                    elif fasta.id == row['nifK']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        nifK.append(rec)
-                    elif fasta.id == row['anfD']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        anfD.append(rec)
-                    elif fasta.id == row['anfK']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        anfK.append(rec)
-                    elif fasta.id == row['anfH']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        anfH.append(rec)
-                    elif fasta.id == row['vnfD']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        vnfD.append(rec)
-                    elif fasta.id == row['vnfK']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        vnfK.append(rec)
-                    elif fasta.id == row['vnfH']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        vnfH.append(rec)
-                    elif fasta.id == row['nflD']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        nflD.append(rec)
-                    elif fasta.id == row['nflH']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        nflH.append(rec)
-                    elif fasta.id == row['ChlN']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        ChlN.append(rec)
-                    if fasta.id == row['ChIl']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        ChIl.append(rec)
-                    elif fasta.id == row['ChlB']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        ChlB.append(rec)
-
 path = os.path.abspath(args.output)
 if not os.path.exists(path):
     os.makedirs(path)
 
-# Make actual fasta files
-SeqIO.write(nifD, path+"/nifD_01052024.faa", "fasta") 
-SeqIO.write(nifH, path+"/nifH_01052024.faa", "fasta")
-SeqIO.write(nifK, path+"/nifK_01052024.faa", "fasta")
+# Open file handles for output files
+h_nifD = open(path+"/nifD.faa", "w")
+h_nifH = open(path+"/nifH.faa", "w")
+h_nifK = open(path+"/nifK.faa", "w")
+h_anfD = open(path+"/anfD.faa", "w")
+h_anfH = open(path+"/anfH.faa", "w")
+h_anfK = open(path+"/anfK.faa", "w")
+h_vnfD = open(path+"/vnfD.faa", "w")
+h_vnfH = open(path+"/vnfH.faa", "w")
+h_vnfK = open(path+"/vnfK.faa", "w")
+h_nflD = open(path+"/nflD.faa", "w")
+h_nflH = open(path+"/nflH.faa", "w")
+h_ChlN = open(path+"/ChlN.faa", "w")
+h_ChIl = open(path+"/ChIl.faa", "w")
+h_ChlB = open(path+"/ChlB.faa", "w")
 
-SeqIO.write(anfD, path+"/anfD_01052024.faa", "fasta")
-SeqIO.write(anfH, path+"/anfH_01052024.faa", "fasta")
-SeqIO.write(anfK, path+"/anfK_01052024.faa", "fasta")
+reg = re.compile(r'^([\w]+_[\w]+.[\w])')
+#GB_GCA_000017645.1
+# Create fasta lists by column name
+directory = args.gtdb
+for file in os.listdir(f"{directory}/archaea")+os.listdir(f"{directory}/bacteria"):
+    if os.path.isfile(os.path.join(f"{directory}/archaea", file)):
+        f = os.path.join(f"{directory}/archaea", file)
+    if os.path.isfile(os.path.join(f"{directory}/bacteria", file)):
+        f = os.path.join(f"{directory}/bacteria", file)
+    else:
+        continue
+    if os.path.isfile(f):
+        regex = reg.match(file).group()
+        matches = df.loc[df['GenomeID'] == regex]
+        for index, row in matches.iterrows():
+            if regex == row['GenomeID']:
+                for fasta in SeqIO.parse(gzip.open(f, "rt"), 'fasta'):
+                    if fasta.id == row['nifD']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_nifD, "fasta")
+                    elif fasta.id == row['nifH']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_nifH, "fasta")
+                    elif fasta.id == row['nifK']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_nifK, "fasta")
+                    elif fasta.id == row['anfD']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_anfD, "fasta")
+                    elif fasta.id == row['anfK']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_anfK, "fasta")
+                    elif fasta.id == row['anfH']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_anfH, "fasta")
+                    elif fasta.id == row['vnfD']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_vnfD, "fasta")
+                    elif fasta.id == row['vnfK']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_vnfK, "fasta")
+                    elif fasta.id == row['vnfH']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_vnfH, "fasta")
+                    elif fasta.id == row['nflD']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_nflD, "fasta")
+                    elif fasta.id == row['nflH']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_nflH, "fasta")
+                    elif fasta.id == row['ChlN']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_ChlN, "fasta")
+                    if fasta.id == row['ChIl']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_ChIl, "fasta")
+                    elif fasta.id == row['ChlB']:
+                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                        SeqIO.write(rec, h_ChlB, "fasta")
 
-SeqIO.write(vnfD, path+"/vnfD_01052024.faa", "fasta")
-SeqIO.write(vnfH, path+"/vnfH_01052024.faa", "fasta")
-SeqIO.write(vnfK, path+"/vnfK_01052024.faa", "fasta")
+# Close file handles
+h_nifD.close()
+h_nifH.close()
+h_nifK.close()
+h_anfD.close()
+h_anfH.close()
+h_anfK.close()
+h_vnfD.close()
+h_vnfH.close()
+h_vnfK.close()
+h_nflD.close()
+h_nflH.close()
+h_ChlN.close()
+h_ChIl.close()
+h_ChlB.close()
 
-SeqIO.write(nflD, path+"/nflD_01052024.faa", "fasta")
-SeqIO.write(nflH, path+"/nflH_01052024.faa", "fasta")
-
-SeqIO.write(ChlN, path+"/ChlN_01052024.faa", "fasta")
-SeqIO.write(ChIl, path+"/ChIl_01052024.faa", "fasta")
-SeqIO.write(ChlB, path+"/ChlB_01052024.faa", "fasta") 
