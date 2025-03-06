@@ -34,6 +34,6 @@
 
 + **taxonomy.py** - finds sequences that are within ≤e-10 cutoff and gets taxonomy of genomes. Outputs ***evalue_taxonomy.tsv*** for those within cutoff range and ***oor_taxonomy.tsv*** for those out of the cutoff range
 
-+ **topfastas.py** - same as tophits.py, but includes a cutoff of ≤e-15, bitscore of ≥50, or alignment length of >125. Outputs ***topfasta.tsv***
++ **topfastas.py** - same as tophits.py, but includes a cutoff of ≤e-15, bitscore of ≥50, and alignment length of >125. Outputs ***topfasta.tsv***
 
 + **tophits.py** - finds top results of each gene and sequence ID within the genomes (i.e. take the nifD result with e-104 rather than those with e-92 or e-63). Outputs ***tophits.tsv***
