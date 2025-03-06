@@ -11,8 +11,11 @@ cat $HMM_DIR/anf*.hmm $HMM_DIR/nif*.hmm $HMM_DIR/vnf*.hmm > $HMM_DIR/merged-anf_
 #Combine nfl/chl HMMs
 cat $HMM_DIR/nfl*.hmm $HMM_DIR/ChIl*.hmm > $HMM_DIR/merged-nfl_chl.hmm
 
+rm -rf $OUT_DIR
+mkdir -p $OUT_DIR
+
 #HMM search
-for file in $GTDB_PATH/*; do 
+for file in $GTDB_PATH/archaea/* $GTDB_PATH/bacteria/*; do
         f="${file##*/}"
         hmmsearch --cpu $CPUS $HMM_DIR/merged-anf_nif_vnf.hmm "$file" > "$OUT_DIR/${f%.faa}_anf_nif_vnf.out"
         hmmsearch --cpu $CPUS $HMM_DIR/merged-nfl_chl.hmm "$file" > "$OUT_DIR/${f%.faa}_nfl_chl.out"
