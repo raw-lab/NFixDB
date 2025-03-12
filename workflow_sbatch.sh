@@ -4,7 +4,7 @@
 #SBATCH --job-name=NFixDB-Workflow
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=16
 #SBATCH --mem=0
 #SBATCH --time=5-0
 #SBATCH -o slurm-%x-%j.out
@@ -134,9 +134,9 @@ echo "======================================================"
 echo "SSU"
 echo "$(date)"
 echo "======================================================"
-command time bash bin/ssu.sh $OUTTSV/filteredhits.tsv $OUTSSU >$LOG/07-ssu.txt
+command time bash bin/ssu.sh $OUTTSV/filteredhits.tsv $OUTSSU &>$LOG/07-ssu.txt
 echo "Running ssu.py..."
-command time python3 bin/ssu.py --input $OUTTSV/filteredhits.tsv --output $OUTTSV/filteredhits_SSU.tsv --ssu $OUTSSU >>$LOG/08-ssu.txt
+command time python3 bin/ssu.py --input $OUTTSV/filteredhits.tsv --output $OUTTSV/filteredhits_SSU.tsv --ssu $OUTSSU >$LOG/08-ssu.txt
 echo "SSU all Done"
 
 echo "======================================================"
@@ -226,9 +226,9 @@ echo "======================================================"
 echo "SSU"
 echo "$(date)"
 echo "======================================================"
-command time bash bin/ssu.sh $OUTTSV/filteredhits.tsv $OUTSSU >$LOG/07-ssu.txt
+command time bash bin/ssu.sh $OUTTSV/filteredhits.tsv $OUTSSU &>$LOG/07-ssu.txt
 echo "Running ssu.py..."
-command time python3 bin/ssu.py --input $OUTTSV/filteredhits.tsv --output $OUTTSV/filteredhits_SSU.tsv --ssu $OUTSSU >>$LOG/08-ssu.txt
+command time python3 bin/ssu.py --input $OUTTSV/filteredhits.tsv --output $OUTTSV/filteredhits_SSU.tsv --ssu $OUTSSU >$LOG/08-ssu.txt
 echo "SSU all Done"
 
 echo "======================================================"
