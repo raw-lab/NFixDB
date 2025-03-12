@@ -42,64 +42,70 @@ h_ChIl = open(path+"/ChIl.faa", "w")
 h_ChlB = open(path+"/ChlB.faa", "w")
 
 reg = re.compile(r'^([\w]+_[\w]+.[\w])')
-#GB_GCA_000017645.1
+
 # Create fasta lists by column name
 directory = args.gtdb
-for file in os.listdir(f"{directory}/archaea")+os.listdir(f"{directory}/bacteria"):
-    if os.path.isfile(os.path.join(f"{directory}/archaea", file)):
-        f = os.path.join(f"{directory}/archaea", file)
-    if os.path.isfile(os.path.join(f"{directory}/bacteria", file)):
-        f = os.path.join(f"{directory}/bacteria", file)
+for file in os.listdir(f"{directory}/archaea") + os.listdir(f"{directory}/bacteria"):
+    if Path(directory, "archaea", file).exists():
+        f = Path(directory, "archaea", file)
+    elif Path(directory, "bacteria", file).exists():
+        f = Path(directory, "bacteria", file)
     else:
+        print("ERROR:", file)
         continue
-    if os.path.isfile(f):
-        regex = reg.match(file).group()
-        matches = df.loc[df['GenomeID'] == regex]
-        for index, row in matches.iterrows():
-            if regex == row['GenomeID']:
-                for fasta in SeqIO.parse(gzip.open(f, "rt"), 'fasta'):
-                    if fasta.id == row['nifD']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_nifD, "fasta")
-                    elif fasta.id == row['nifH']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_nifH, "fasta")
-                    elif fasta.id == row['nifK']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_nifK, "fasta")
-                    elif fasta.id == row['anfD']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_anfD, "fasta")
-                    elif fasta.id == row['anfK']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_anfK, "fasta")
-                    elif fasta.id == row['anfH']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_anfH, "fasta")
-                    elif fasta.id == row['vnfD']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_vnfD, "fasta")
-                    elif fasta.id == row['vnfK']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_vnfK, "fasta")
-                    elif fasta.id == row['vnfH']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_vnfH, "fasta")
-                    elif fasta.id == row['nflD']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_nflD, "fasta")
-                    elif fasta.id == row['nflH']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_nflH, "fasta")
-                    elif fasta.id == row['ChlN']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_ChlN, "fasta")
-                    if fasta.id == row['ChIl']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_ChIl, "fasta")
-                    elif fasta.id == row['ChlB']:
-                        rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
-                        SeqIO.write(rec, h_ChlB, "fasta")
+
+    regex = reg.match(file).group()
+    matches = df.loc[df['GenomeID'] == regex]
+    for index, row in matches.iterrows():
+        if regex == row['GenomeID']:
+            if f.suffix.endswith('.gz'):
+                f_handle = gzip.open(f, "rt")
+            else:
+                f_handle = open(f)
+            for fasta in SeqIO.parse(f_handle, 'fasta'):
+                if fasta.id == row['nifD']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_nifD, "fasta")
+                elif fasta.id == row['nifH']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_nifH, "fasta")
+                elif fasta.id == row['nifK']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_nifK, "fasta")
+                elif fasta.id == row['anfD']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_anfD, "fasta")
+                elif fasta.id == row['anfK']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_anfK, "fasta")
+                elif fasta.id == row['anfH']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_anfH, "fasta")
+                elif fasta.id == row['vnfD']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_vnfD, "fasta")
+                elif fasta.id == row['vnfK']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_vnfK, "fasta")
+                elif fasta.id == row['vnfH']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_vnfH, "fasta")
+                elif fasta.id == row['nflD']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_nflD, "fasta")
+                elif fasta.id == row['nflH']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_nflH, "fasta")
+                elif fasta.id == row['ChlN']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_ChlN, "fasta")
+                elif fasta.id == row['ChIl']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_ChIl, "fasta")
+                elif fasta.id == row['ChlB']:
+                    rec = SeqRecord(Seq(str(fasta.seq)), id=fasta.id, description=fasta.description)
+                    SeqIO.write(rec, h_ChlB, "fasta")
+            f_handle.close()
 
 # Close file handles
 h_nifD.close()
