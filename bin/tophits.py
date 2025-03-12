@@ -9,8 +9,8 @@ from pathlib import Path
 import pandas as pd
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-i', '--input', type=str, default='data/TSVs/complete_taxonomy.tsv', help="Path to the taxonomy file")
-parser.add_argument('-o', '--outpath', type=str, default='results/TSVs', help="Path to the folder containing the HMM hits")
+parser.add_argument('-i', '--input', type=str, default='results/i1/TSVs/evalue_taxonomy.tsv', help="Path to the evalue_taxonomy file")
+parser.add_argument('-o', '--outpath', type=str, default='results/i1/TSVs', help="Path to the folder containing the HMM hits")
 
 args = parser.parse_args()
 
@@ -54,40 +54,30 @@ top_fasta = pd.DataFrame(columns=[
     'ChlN', 'EV_ChlN', 'bitscore_ChlN', 'location_ChlN', 'alnLen_ChlN', 'seqLen_ChlN',])
 
 # First sort to find top result for sequence ID (temporary file later deleted)
-df2 = df.groupby(["GenomeID", "SeqID"]).first()
-df2 = df2.sort_values("EValue")
-df2.to_csv("hits_temp.tsv", sep = "\t")
+df = df.groupby(["GenomeID", "SeqID"]).first()
+df = df.sort_values("EValue")
+df.to_csv("temp_hits.tsv", sep = "\t")
 
 # Second sort to find top result for sequence ID and gene (temporary file later deleted)
-df3 = pd.DataFrame(pd.read_table('hits_temp.tsv'))
-df3 = df3.groupby(["GenomeID", "GeneName"]).first()
-df3.to_csv("hits_temp2.tsv", sep = "\t")
-df3 = pd.DataFrame(pd.read_table('hits_temp2.tsv'))
+df = pd.DataFrame(pd.read_table('temp_hits.tsv'))
+df = df.groupby(["GenomeID", "GeneName"]).first()
+df.to_csv("temp_hits.tsv", sep = "\t")
+df = pd.DataFrame(pd.read_table('temp_hits.tsv'))
 
-print(df3)
-print(df.groupby(["GenomeID", "SeqID"]).first().sort_values("EValue").groupby(["GenomeID", "GeneName"]).first())
-df.groupby(["GenomeID", "SeqID"]).first().sort_values("EValue").groupby(["GenomeID", "GeneName"]).first().to_csv("hits_temp2.tsv", sep = "\t")
+Path('temp_hits.tsv').unlink()
 
 # Loop through top hits dataframe to put it in the corressponding columns
-for index, row in df3.iterrows():
-    for col in topHits_df.columns:
-        if row['GeneName'] == col:
-            ev = "EV_" + col
-            bs = "bitscore_" + col
-            lo = "location_" + col
-            al = "alnLen_" + col
-            sl = "seqLen_" + col
-            topHits_df.at[row['GenomeID'], [col, ev, bs, lo, al, sl, 'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength'], row['GTDB_Tax'], row['NCBI_TaxID'], row['NCBI_Tax']
-    for col in top_fasta.columns:
-        if row['GeneName'] == col:
-            if row['EValue'] < 9.9e-15 or row['Bitscore'] > 50 or row['AlnLength'] > 125:
-                ev = "EV_" + col
-                bs = "bitscore_" + col
-                lo = "location_" + col
-                al = "alnLen_" + col
-                sl = "seqLen_" + col
-                top_fasta.at[row['GenomeID'], [col, ev, bs, lo, al, sl]] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength']
+for index, row in df.iterrows():
+    col = row['GeneName']
+    ev = "EV_" + col
+    bs = "bitscore_" + col
+    lo = "location_" + col
+    al = "alnLen_" + col
+    sl = "seqLen_" + col
+    topHits_df.at[row['GenomeID'], [col, ev, bs, lo, al, sl, 'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength'], row['GTDB_Tax'], row['NCBI_TaxID'], row['NCBI_Tax']
 
+    if row['EValue'] < 9.9e-15 or row['Bitscore'] > 50 or row['AlnLength'] > 125:
+        top_fasta.at[row['GenomeID'], [col, ev, bs, lo, al, sl]] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength']
 
 # Drop duplicates and make a TSV
 topHits_df = topHits_df.drop_duplicates()
