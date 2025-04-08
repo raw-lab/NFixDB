@@ -76,7 +76,7 @@ for index, row in df.iterrows():
     sl = "seqLen_" + col
     topHits_df.at[row['GenomeID'], [col, ev, bs, lo, al, sl, 'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength'], row['GTDB_Tax'], row['NCBI_TaxID'], row['NCBI_Tax']
 
-    if row['EValue'] < 9.9e-15 or row['Bitscore'] > 50 or row['AlnLength'] > 125:
+    if row['EValue'] < 9.9e-15 and row['Bitscore'] > 50 and row['AlnLength'] > 125:
         top_fasta.at[row['GenomeID'], [col, ev, bs, lo, al, sl]] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength']
 
 # Drop duplicates and make a TSV
