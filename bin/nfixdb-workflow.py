@@ -4,14 +4,16 @@ import argparse
 import time
 from pathlib import Path
 
-import lib.nfdb_hmm as nfdb_hmm
-import lib.nfdb_taxonomy as nfdb_taxonomy
-import lib.nfdb_tophits as nfdb_tophits
-import lib.nfdb_analysis as nfdb_analysis
-import lib.nfdb_analysis_fasta as nfdb_analysis_fasta
-import lib.nfdb_nitrogenase_fastas as nfdb_nitrogenase_fastas
-import lib.nfdb_ssu as nfdb_ssu
-import lib.nfdb_final as nfdb_final
+
+from nfixdb import nfdb_hmm
+from nfixdb import nfdb_check
+from nfixdb import nfdb_taxonomy
+from nfixdb import nfdb_tophits
+from nfixdb import nfdb_analysis
+from nfixdb import nfdb_analysis_fasta
+from nfixdb import nfdb_nitrogenase_fastas
+from nfixdb import nfdb_ssu
+from nfixdb import nfdb_final
 
 
 def main():
@@ -30,14 +32,17 @@ def main():
 	threads = args.threads
 
 	output = output_folder/"alignments"
+	hmm_db = list()
 	if not output.exists():
 		print("Creating HMMs from seed files...")
-		hmm_db = list()
 		start = time.time()
 		for seed_file in Path(args.seeds).glob('*.faa'):
 			hmm_db += [nfdb_hmm.create_hmm(seed_file, output, CPUs=threads)]
 		end = time.time()
 		print(f"Finished creating HMMs in {end - start:.2f} seconds")
+	else:
+		for hmm_file in output.glob('*.hmm'):
+			hmm_db += [hmm_file]
 
 	output = output_folder/"gtdb-results"
 	if output.exists() is False:
@@ -84,6 +89,14 @@ def main():
 	nfdb_nitrogenase_fastas.extract_fastas(filtered_fasta_file, output_folder/"fastas", gtdb_proteins)
 	end = time.time()
 	print(f"Nitrogenase sequence extraction completed in {end - start:.2f} seconds.")
+
+	print("Checking nitrogenase sequences with Cerberus...")
+	start = time.time()
+	nfdb_check.check_fastas_with_cerberus(output_folder/"fastas", Path("/home/jlfiguer/database/db-metacerberus/"), output_folder/"cerberus_results")
+	end = time.time()
+	print(f"Cerberus checking completed in {end - start:.2f} seconds.")
+
+	return 0
 
 	print("Generating SSU sequences...")
 	start = time.time()

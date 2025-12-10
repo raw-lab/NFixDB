@@ -14,7 +14,7 @@ def align(seed_file, aligned_output, threads=4):
 	# mafft --thread $CPUS --localpair --maxiterate 1000 $SEEDS/nifH*.faa > $ALIGN_DIR/nifH-aln.faa
 	cmd = ["mafft", "--localpair", "--maxiterate", "1000", "--thread", f"{threads}", str(seed_file)]
 	out = aligned_output.open('w')
-	p = subprocess.run(cmd, stdout=out, stderr=subprocess.PIPE, text=True)
+	p = subprocess.run(cmd, stdout=out, stderr=subprocess.PIPE)
 	#if p.returncode != 0:
 	#	print("Error in MAFFT alignment:")
 	#	print(p.stderr)
