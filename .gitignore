@@ -1,0 +1,8 @@
+__pycache__
+build
+*.egg-info
+temp*
+.DS_Store
+.vscode
+.idea
+.env
