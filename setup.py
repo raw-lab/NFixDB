@@ -27,7 +27,7 @@ setuptools.setup(
     scripts=['bin/nfixdb-workflow.py',],                                      # scripts to copy to 'bin' path
     packages=['nfixdb'],                                         # list of packages, installed to site-packages folder
     package_dir=dict(nfixdb='lib'),                              # dict with 'package'='relative dir'
-    package_data=dict(nfoxdb=package_files('lib/')),             # add non-python data to package, relative paths
+    package_data=dict(nfixdb=package_files('lib/')),             # add non-python data to package, relative paths
     license="BSD License",  # metadata
     platforms=['Unix'],     # metadata
     classifiers=[           # This is the new updated way for metadata (PyPi??), but old way seems to still be used in some of the output
