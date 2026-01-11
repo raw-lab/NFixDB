@@ -33,19 +33,19 @@
 # 
 # Before running, make sure that the GTDB_PATH
 # and GTDB_FNA point to a valid path containing
-# the protein and nucleotide, reference files from
+# the protein and nucleotide reference files from
 # GTDB, respectively.
 
 if [ -z "$SLURM_CPUS_ON_NODE" ]
 then
-	SLURM_JOBID=NFixDB-Workflow
+	SLURM_JOBID=0
+	SLURM_JOB_NAME=NFixDB-Workflow
 	SLURM_JOB_NODELIST=$(hostname)
 	SLURM_NTASKS=1
 	SLURM_NNODES=1
-	SLURM_CPUS_ON_NODE=1
+	SLURM_CPUS_ON_NODE=10
 	SLURM_CPUS_PER_TASK=1
 	SLURM_SUBMIT_DIR=$(pwd)
-	SLURM_JOBID=0
 fi
 
 echo "====================================================="
@@ -70,7 +70,7 @@ export GTDB_FNA="/projects/raw_lab/databases/GTDB/v220/protein_fna_reps"
 
 
 SEEDS="data/seeds/initial"
-RESULTS=results/i1
+RESULTS=results/$SLURM_JOB_NAME
 ALIGN_DIR=$RESULTS/alignments
 HMM_DIR=$RESULTS/HMMs
 OUTDIR=$RESULTS/bac120_ar53
