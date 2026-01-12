@@ -35,10 +35,12 @@ def check_fastas_with_cerberus(fasta_folder:Path, cerberus_db:Path, output_folde
 	output_folder.mkdir(parents=True, exist_ok=True)
 
 	log = output_folder / f"stdout.log"
-	with open(log, 'w') as out_f, log.with_name("stderr.log").open('w') as err_f:
+	err = output_folder / f"stderr.log"
+	with open(log, 'w') as out_f, err.open('w') as err_f:
 		# Run Cerberus
 		cmd = ["cerberus.py", "--protein", str(fasta_folder), "--hmm", hmm_list, "--db", str(cerberus_db), "--dir-out", str(output_folder), "--cpus", str(cpus)]
-		result = sp.run(cmd, stderr=err_f, stdout=out_f)
+		result = sp.Popen(cmd, stderr=err_f, stdout=out_f)
+		result.wait()
 
 	# Process Cerberus output files
 	process_cerberus_output(fasta_folder, output_folder)
