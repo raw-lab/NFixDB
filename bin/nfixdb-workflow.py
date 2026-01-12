@@ -41,7 +41,7 @@ def main():
 	# Step 1: Check seed sequences with Cerberus
 	print("Checking seed sequences with Cerberus...")
 	start = time.time()
-	filtered_seeds = nfdb_check.check_fastas_with_cerberus(seeds, db_path, output_folder/"cerberus_results"/"seeds", threads=threads)
+	filtered_seeds = nfdb_check.check_fastas_with_cerberus(seeds, db_path, output_folder/"cerberus_results"/"seeds", cpus=threads)
 	if args.filter:
 		print("Filtering seed sequences based on Cerberus results...")
 		seeds = filtered_seeds
@@ -117,7 +117,7 @@ def main():
 	# Step 9: Check nitrogenase sequences with Cerberus
 	print("Checking nitrogenase sequences with Cerberus...")
 	start = time.time()
-	filtered_fastas = nfdb_check.check_fastas_with_cerberus(nitrogenase_fastas, db_path, output_folder/"cerberus_results"/"fastas", threads=threads)
+	filtered_fastas = nfdb_check.check_fastas_with_cerberus(nitrogenase_fastas, db_path, output_folder/"cerberus_results"/"fastas", cpus=threads)
 	if args.filter:
 		print("Filtering nitrogenase sequences based on Cerberus results...")
 		nitrogenase_fastas = filtered_fastas
