@@ -10,9 +10,12 @@ import pandas as pd
 
 def top_hits(evalue_taxonomy_file, outpath):
     # Get evalue_taxonomy TSV
+    outpath = Path(outpath)
     df = pd.DataFrame(pd.read_table(evalue_taxonomy_file))
     df = df.sort_values('EValue').drop_duplicates()
 
+    if (outpath/"tophits.tsv").exists():
+        return outpath
 
     # Take subset of dataframe
     topHits_df = pd.DataFrame(columns=[
@@ -70,9 +73,8 @@ def top_hits(evalue_taxonomy_file, outpath):
         al = "alnLen_" + col
         sl = "seqLen_" + col
         
-        topHits_df.loc[row['GenomeID'], [col, ev, bs, lo, al, sl, 'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']] = [row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength'], row['GTDB_Tax'], row['NCBI_TaxID'], row['NCBI_Tax']]
-
         if row['EValue'] < 9.9e-15 and row['Bitscore'] > 50 and row['AlnLength'] > 125:
+            topHits_df.loc[row['GenomeID'], [col, ev, bs, lo, al, sl, 'GTDB_Tax', 'NCBI_TaxID', 'NCBI_Tax']] = [row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength'], row['GTDB_Tax'], row['NCBI_TaxID'], row['NCBI_Tax']]
             top_fasta.loc[row['GenomeID'], [col, ev, bs, lo, al, sl]] = row['SeqID'], row['EValue'], row['Bitscore'], row['Location'], row['AlnLength'], row['SeqLength']
 
     # Drop duplicates and make a TSV
