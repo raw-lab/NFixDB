@@ -2,6 +2,7 @@ __pycache__
 build
 *.egg-info
 temp*
+test*
 .DS_Store
 .vscode
 .idea
