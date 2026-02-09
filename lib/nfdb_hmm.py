@@ -27,25 +27,30 @@ def create_hmm(seed_file, hmm_output, CPUs=4):
 	hmm_output = Path(hmm_output)
 	hmm_output.mkdir(parents=True, exist_ok=True)
 
+	outfile = hmm_output/f"{seed_file.stem}.hmm"
+	if outfile.exists():
+		return outfile
+
 	alpha = pyhmmer.easel.Alphabet.amino()
 	MSAFile = pyhmmer.easel.MSAFile
 	DigitalMSA = pyhmmer.easel.DigitalMSA
 	builder = pyhmmer.plan7.Builder(alphabet=alpha)
 	background = pyhmmer.plan7.Background(alpha)
 
-	alignment = align(seed_file, hmm_output/f"{seed_file.stem}.aln", threads=CPUs)
 
-	with MSAFile(alignment, alphabet=alpha) as msa_file:
-		msa = msa_file.read()
-	msa.name = seed_file.stem.encode()
-	msa_d = msa.digitize(alpha)
+	if seed_file.stat().st_size > 0:
+		alignment = align(seed_file, hmm_output/f"{seed_file.stem}.aln", threads=CPUs)
 
-	hmm, _, _ = builder.build_msa(msa_d, background)
-	#hmm.name = seed_file.stem.encode()
+		with MSAFile(alignment, alphabet=alpha) as msa_file:
+			msa = msa_file.read()
+		msa.name = seed_file.stem.encode()
+		msa_d = msa.digitize(alpha)
 
-	outfile = hmm_output/f"{seed_file.stem}.hmm"
-	with open(outfile, "wb") as hmm_file:
-		hmm.write(hmm_file)
+		hmm, _, _ = builder.build_msa(msa_d, background)
+		#hmm.name = seed_file.stem.encode()
+
+		with open(outfile, "wb") as hmm_file:
+			hmm.write(hmm_file)
 	return outfile
 
 
@@ -59,13 +64,15 @@ def hmmscan(protein_path, outpath, hmm, CPUs=4, minscore=30, evalue=1e-10):
 	#print("Scanning", len(file_list), "files")
 	for amino in file_list:
 		outfile = Path(outpath) / f"{amino.stem}-{hmm.stem}.tsv"
+		if outfile.exists():
+			continue
+
 		tmpfile = outfile.with_suffix(".tmp")
 		if amino.suffix == ".gz":
 			amino_file = gzip.open(amino, "rt")
 		else:
 			amino_file = open(amino, "rt")
 		
-		#with open(tmpfile, 'wt') as hmm_writer, pyhmmer.plan7.HMMFile(hmm) as hmm_reader, pyhmmer.easel.SequenceFile(amino_file, digital=True, alphabet=alphabet) as seq_reader:
 		with open(tmpfile, 'wt') as hmm_writer, pyhmmer.plan7.HMMFile(hmm) as hmm_reader:
 			seq_reader = list()
 			line = amino_file.readline()
@@ -98,11 +105,9 @@ def hmmscan(protein_path, outpath, hmm, CPUs=4, minscore=30, evalue=1e-10):
 							len(align.hmm_sequence),
 							h.description.decode(),
 							sep='\t', file=hmm_writer)
-
-
-		if tmpfile.stat().st_size > 0:
-			tmpfile.rename(outfile)
-		else:
-			tmpfile.unlink(missing_ok=True)
+		#if tmpfile.stat().st_size > 0:
+		tmpfile.rename(outfile)
+		#else:
+		#	tmpfile.unlink(missing_ok=True)
 
 	return
