@@ -7,25 +7,18 @@ Loads the taxonomy file and creates a table with matches from hmmsearch.
 import gzip
 from pathlib import Path
 import re
-import argparse
-import pandas as pd
-from Bio import SearchIO
+import pkg_resources as pkg
 
-#import pkg_resources as pkg
-#TAXONOMY = pkg.resource_filename("NFixDB", "data")
+#TAXONOMY = pkg.resource_filename("nfixdb", "data")
 TAXONOMY = Path("data", "TSVs")
 
-
-parser = argparse.ArgumentParser()
-parser.add_argument('-t', '--taxonomy', type=str, default='data/TSVs/complete_taxonomy.tsv', help="Path to the taxonomy file")
-parser.add_argument('--hitpath', type=str, default='results/bac120_ar53/', help="Path to the folder containing the HMM hits")
-parser.add_argument('-o', '--outfile', type=str, default='results/TSVs/evalue_taxonomy.tsv', help="Path to the folder containing the HMM hits")
-
-#args = parser.parse_args()
 
 def get_taxonomy(hitpath, outfile):
 	# Get taxonomy from GTDB and NCBI
 	outfile = Path(outfile)
+	if outfile.exists():
+		print("Merged taxonomy file already exists:", outfile)
+		return outfile
 
 	taxonomy = Path(TAXONOMY, "complete_taxonomy.tsv.gz")
 	tax_db = dict()
@@ -43,34 +36,8 @@ def get_taxonomy(hitpath, outfile):
 	reGeneName = re.compile(r'([a-zA-Z]+)')
 	reDescription = re.compile(r'# ([0-9]+) # ([0-9]+)')
 
-	#Taxonomy:
-	#GenomeID	GTDB_Tax	NCBI_TaxID	NCBI_Tax
-	#GB_GCA_003158115.1	d__Archaea;p__Methanobacteriota;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium_B;s__Methanobacterium_B sp003158115	2164	d__Archaea;p__Euryarchaeota;x__Methanomada group;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium;x__unclassified Methanobacterium;s__Methanobacterium sp.
-
-	#Hit file name
-	#GB_GCA_003158115.1_protein-combined.tsv
-
-	#Contents of hit file
-	#h.name, query_name, evalue, score, length, align.target_from, align.target_to,
-	#PMGM01000076.1_11       nflH_121623     2.8E-120        397.6   263     5       261
-	#PMGM01000034.1_5        nflH_121623     1.1E-114        379.1   276     2       270
-
-	#OUTPUT:
-	#GenomeID	GeneName	SeqID	EValue	Bitscore	Location	AlnLength	SeqLength	GTDB_Tax	NCBI_TaxID	NCBI_Tax
-	#GB_GCA_003158115.1	anfD	PMGM01000034.1_8	0.0	1093.7	4051-5613	516	1562	d__Archaea;p__Methanobacteriota;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium_B;s__Methanobacterium_B sp003158115	2164.0	d__Archaea;p__Euryarchaeota;x__Methanomada group;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium;x__unclassified Methanobacterium;s__Methanobacterium sp.
-	#GB_GCA_003158115.1	anfD	PMGM01000034.1_8	0.0	1093.7	1-516	521	521	521
-
-
-
-#GB_GCA_003158115.1	vnfD	PMGM01000034.1_8	5.2e-210	695.1	4051-5613	463	1562	d__Archaea;p__Methanobacteriota;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium_B;s__Methanobacterium_B sp003158115	2164.0	d__Archaea;p__Euryarchaeota;x__Methanomada group;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium;x__unclassified Methanobacterium;s__Methanobacterium sp.
-#GB_GCA_003158115.1	vnfD	PMGM01000048.1_28	3.1e-026	89.1	27273-28805	375	1532	d__Archaea;p__Methanobacteriota;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium_B;s__Methanobacterium_B sp003158115	2164.0	d__Archaea;p__Euryarchaeota;x__Methanomada group;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium;x__unclassified Methanobacterium;s__Methanobacterium sp.
-#GB_GCA_003158115.1	vnfD	PMGM01000048.1_29	5.7e-016	55.2	28802-30160	275	1358	d__Archaea;p__Methanobacteriota;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium_B;s__Methanobacterium_B sp003158115	2164.0	d__Archaea;p__Euryarchaeota;x__Methanomada group;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium;x__unclassified Methanobacterium;s__Methanobacterium sp.
-#GB_GCA_003158115.1	vnfD	PMGM01000034.1_10	2.4e-012	43.3	5989-7377	190	1388	d__Archaea;p__Methanobacteriota;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium_B;s__Methanobacterium_B sp003158115	2164.0	d__Archaea;p__Euryarchaeota;x__Methanomada group;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobacterium;x__unclassified Methanobacterium;s__Methanobacterium sp.
-
-
 # https://ftp.ncbi.nih.gov/pub/taxonomy/
 # datasets summary genome accession GCA_026014805.1
-
 
 
 	# Parse through files in output directory from hmmsearch
