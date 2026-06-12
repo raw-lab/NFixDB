@@ -5,14 +5,14 @@ import time
 from pathlib import Path
 
 
-from nfixdb import nfdb_hmm
-from nfixdb import nfdb_check
-from nfixdb import nfdb_taxonomy
-from nfixdb import nfdb_tophits
-from nfixdb import nfdb_analysis
-from nfixdb import nfdb_nitrogenase_fastas
-from nfixdb import nfdb_ssu
-from nfixdb import nfdb_final
+from nfixdb import nfixdb_hmm
+from nfixdb import nfixdb_check
+from nfixdb import nfixdb_taxonomy
+from nfixdb import nfixdb_tophits
+from nfixdb import nfixdb_analysis
+from nfixdb import nfixdb_nitrogenase_fastas
+from nfixdb import nfixdb_ssu
+from nfixdb import nfixdb_final
 
 
 def main():
@@ -40,7 +40,7 @@ def main():
 	# Step 1: Check seed sequences with Cerberus
 	print("Checking seed sequences with Cerberus...")
 	start = time.time()
-	filtered_seeds = nfdb_check.check_fastas_with_cerberus(seeds, db_path, output_folder/"cerberus_results"/"seeds", cpus=threads)
+	filtered_seeds = nfixdb_check.check_fastas_with_cerberus(seeds, db_path, output_folder/"cerberus_results"/"seeds", cpus=threads)
 	if args.filter:
 		print("Filtering seed sequences based on Cerberus results...")
 		seeds = filtered_seeds
@@ -53,7 +53,7 @@ def main():
 	print("Creating HMMs from seed files...")
 	start = time.time()
 	for seed_file in Path(seeds).glob('*.faa'):
-		hmm_db += [nfdb_hmm.create_hmm(seed_file, output, CPUs=threads)]
+		hmm_db += [nfixdb_hmm.create_hmm(seed_file, output, CPUs=threads)]
 	end = time.time()
 	print(f"Finished creating HMMs in {end - start:.2f} seconds")
 
@@ -65,7 +65,7 @@ def main():
 	with open(combined, "w") as writer:
 		for hmm in hmm_db:
 			writer.write(open(hmm).read())
-	nfdb_hmm.hmmscan(gtdb_proteins, output, combined, CPUs=threads)
+	nfixdb_hmm.hmmscan(gtdb_proteins, output, combined, CPUs=threads)
 	end = time.time()
 	print(f"HMM scanning completed in {end - start:.2f} seconds.")
 
@@ -73,7 +73,7 @@ def main():
 	print("Merging with GTDB and NCBI taxonomy")
 	start = time.time()
 	taxonomy_file = output_folder/"TSVs"/"evalue_taxonomy.tsv"
-	nfdb_taxonomy.get_taxonomy(output_folder/"gtdb-results", taxonomy_file)
+	nfixdb_taxonomy.get_taxonomy(output_folder/"gtdb-results", taxonomy_file)
 	end = time.time()
 	print(f"Taxonomy merging completed in {end - start:.2f} seconds.")
 
@@ -81,7 +81,7 @@ def main():
 	print("Filtering for top hits...")
 	start = time.time()
 	top_hits_file = output_folder/"TSVs"
-	nfdb_tophits.top_hits(taxonomy_file, top_hits_file)
+	nfixdb_tophits.top_hits(taxonomy_file, top_hits_file)
 	end = time.time()
 	print(f"Top hits filtering completed in {end - start:.2f} seconds.")
 
@@ -89,21 +89,21 @@ def main():
 	print("Analyzing hits...")
 	start = time.time()
 	filtered_hits_file = output_folder/"TSVs"/"filteredhits.tsv"
-	nfdb_analysis.analyze_hits(top_hits_file/"tophits.tsv", filtered_hits_file)
+	nfixdb_analysis.analyze_hits(top_hits_file/"tophits.tsv", filtered_hits_file)
 	end = time.time()
 	print(f"Hit analysis completed in {end - start:.2f} seconds.")
 
 	# Step 7: Extract nitrogenase sequences
 	print("Extracting nitrogenase sequences...")
 	start = time.time()
-	nfdb_nitrogenase_fastas.extract_fastas(filtered_hits_file, output_folder/"fastas", gtdb_proteins)
+	nfixdb_nitrogenase_fastas.extract_fastas(filtered_hits_file, output_folder/"fastas", gtdb_proteins)
 	end = time.time()
 	print(f"Nitrogenase sequence extraction completed in {end - start:.2f} seconds.")
 
 	# Step 8: Check nitrogenase sequences with Cerberus
 	print("Checking nitrogenase sequences with Cerberus...")
 	start = time.time()
-	filtered_fastas = nfdb_check.check_fastas_with_cerberus(nitrogenase_fastas, db_path, output_folder/"cerberus_results"/"fastas", cpus=threads)
+	filtered_fastas = nfixdb_check.check_fastas_with_cerberus(nitrogenase_fastas, db_path, output_folder/"cerberus_results"/"fastas", cpus=threads)
 	if args.filter:
 		print("Filtering nitrogenase sequences based on Cerberus results...")
 		nitrogenase_fastas = filtered_fastas
@@ -116,7 +116,7 @@ def main():
 	nitro_hmm_db = list()
 	output = output_folder/"nitro-alignments"
 	for seed_file in Path(nitrogenase_fastas).glob('*.faa'):
-		nitro_hmm_db += [nfdb_hmm.create_hmm(seed_file, output, CPUs=threads)]
+		nitro_hmm_db += [nfixdb_hmm.create_hmm(seed_file, output, CPUs=threads)]
 	end = time.time()
 	final_hmm = output_folder/"NFixDB.hmm"
 	with open(final_hmm, "w") as writer:
@@ -128,7 +128,7 @@ def main():
 	print("Generating SSU sequences...")
 	start = time.time()
 	ssu_path = output_folder/"SSUs"
-	nfdb_ssu.generate_ssu(filtered_hits_file, ssu_path, gtdb_nucleotides, threads=threads)
+	nfixdb_ssu.generate_ssu(filtered_hits_file, ssu_path, gtdb_nucleotides, threads=threads)
 	end = time.time()
 	print(f"SSU generation completed in {end - start:.2f} seconds.")
 
@@ -136,7 +136,7 @@ def main():
 	print("Adding SSU sequences to filtered hits...")
 	start = time.time()
 	filtered_hits_ssu_file = output_folder / "TSVs" / "filteredhits_SSU.tsv"
-	nfdb_ssu.add_ssu_to_filteredhits(filtered_hits_file, ssu_path, filtered_hits_ssu_file)
+	nfixdb_ssu.add_ssu_to_filteredhits(filtered_hits_file, ssu_path, filtered_hits_ssu_file)
 	end = time.time()
 	print(f"SSU addition completed in {end - start:.2f} seconds.")
 
@@ -144,7 +144,7 @@ def main():
 	print("Finalizing NFixDB sql and tsv files...")
 	start = time.time()
 	final_tsv = output_folder / "NFixDB.tsv"
-	nfdb_final.finalize_database(output_folder/"TSVs", final_tsv, output_folder/"NFixDB.sql")
+	nfixdb_final.finalize_database(output_folder/"TSVs", final_tsv, output_folder/"NFixDB.sql")
 	end = time.time()
 	print(f"NFixDB finalization completed in {end - start:.2f} seconds.")
 
