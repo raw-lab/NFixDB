@@ -7,9 +7,87 @@ Filters top hits and finds which genomes have all three of each group of genes.
 import pandas as pd
 
 
+CLUSTERS = {
+    "nif": ["location_nifD", "location_nifK"],
+    "vnf": ["location_vnfD", "location_vnfK"],
+    "anf": ["location_anfD", "location_anfK"],
+}
+
+H_COLUMNS = [
+    "",
+    "EV_",
+    "bitscore_",
+    "location_",
+    "alnLen_",
+    "seqLen_",
+]
+
+def midpoint(location):
+    if pd.isna(location):
+        return None, None
+    try:
+        if ":" in location:
+            contig, coords = location.split(":")
+        else:
+            contig = ""
+            coords = location
+
+        start, end = map(int, coords.split("-"))
+        return contig, (start + end) // 2
+
+    except Exception:
+        return None, None
+
+
+def fix_H(df, max_distance=20000):
+    """
+    Fixes H assignments by finding the nearest D/K pair for each H gene.
+    """
+    for idx, row in df.iterrows():
+        # Look at every H gene that exists
+        for current in ["nif", "vnf", "anf"]:
+            if pd.isna(row[current + "H"]):
+                continue
+
+            best_cluster = None
+            best_distance = max_distance + 1
+            for cluster, genes in CLUSTERS.items():
+                for gene in genes:
+                    # get distance
+                    mid1 = sum(map(int, row[f"location_{current}H"].split("-"))) // 2
+                    mid2 = sum(map(int, row[gene].split("-"))) // 2
+                    if mid1 is None or mid2 is None:
+                        continue
+                    distance = abs(mid1 - mid2)
+                    # Check if this is the best cluster so far
+                    if distance < best_distance:
+                        best_distance = distance
+                        best_cluster = cluster
+            if best_cluster is None:
+                continue
+            if best_cluster != current:
+                # Move values from current to best_cluster
+                print(f"Moving {current}H to {best_cluster}H in row {idx}")
+                print(f"Genome: {row['GenomeID']}")
+                print(f"Location: {row[f'location_{current}H']}")
+                print(f"Location: {row[f'location_{best_cluster}H']}")
+                for prefix in H_COLUMNS:
+                    old = f"{prefix}{current}H"
+                    new = f"{prefix}{best_cluster}H"
+                    df.at[idx, new] = df.at[idx, old]
+                    df.at[idx, old] = pd.NA
+
+    return df
+
+
+
 def analyze_hits(tophits_file, outfile):
 
         df = pd.DataFrame(pd.read_table(tophits_file))
+
+		# Fix H assignment of genes based on proximity to others.
+        fix_H(df)
+
         print("Hits Counts:")
 
         #nifHDK
